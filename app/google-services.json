@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "45427327346",
+    "firebase_url": "https://catchat-f56ea.firebaseio.com",
+    "project_id": "catchat-f56ea",
+    "storage_bucket": "catchat-f56ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:45427327346:android:5080b3fa3f0a0d1d",
+        "android_client_info": {
+          "package_name": "channa.com.catchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "45427327346-l0jeu88q012tc1ve1et16a8ujdmrsvt7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "channa.com.catchat",
+            "certificate_hash": "6ED033C583493A57DE9A136E81CFB88E039D7CF2"
+          }
+        },
+        {
+          "client_id": "45427327346-a1m7mrivh6ao4fs33vhebu6agb8t5u6g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4gojBrWhW7WNs8w7dYox2GyGnMp25DJo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "45427327346-a1m7mrivh6ao4fs33vhebu6agb8t5u6g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
