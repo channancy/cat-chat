@@ -27,6 +27,10 @@ dependencies {
     compile 'com.android.support:design:25.1.0'
     compile 'com.android.support:support-v4:25.1.0'
 
+    // Butterknife
+    compile 'com.jakewharton:butterknife:8.5.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+
     // Displaying images
     compile 'com.github.bumptech.glide:glide:3.6.1'
 

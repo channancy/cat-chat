@@ -23,7 +23,7 @@
             android:layout_weight="3"/>
 
         <Button
-            android:id="@+id/btn_submit_friend_search"
+            android:id="@+id/btn_friend_search_submit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -35,5 +35,12 @@
         android:id="@+id/tv_friend_search_result"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btn_add_friend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_friend"
+        android:visibility="gone"/>
 
 </LinearLayout>

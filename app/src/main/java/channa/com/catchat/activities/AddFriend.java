@@ -15,6 +15,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.NoSuchElementException;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import channa.com.catchat.R;
 import channa.com.catchat.models.User;
 
@@ -25,35 +27,35 @@ public class AddFriend extends AppCompatActivity {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mUsersDatabaseReference;
 
-    private EditText mEtFriendSearch;
-    private Button mBtnSearch;
-    private TextView mTvFriendSearchResult;
+    @BindView(R.id.et_friend_search) EditText etFriendSearch;
+    @BindView(R.id.btn_friend_search_submit) Button btnSubmitFriendSearch;
+    @BindView(R.id.btn_add_friend) Button btnAddFriend;
+    @BindView(R.id.tv_friend_search_result) TextView tvFriendSearchResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
+        ButterKnife.bind(this);
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mUsersDatabaseReference = mFirebaseDatabase.getReference().child("users");
 
-        mEtFriendSearch = (EditText) findViewById(R.id.et_friend_search);
-        mBtnSearch = (Button) findViewById(R.id.btn_submit_friend_search);
-        mTvFriendSearchResult = (TextView) findViewById(R.id.tv_friend_search_result);
-
-        mBtnSearch.setOnClickListener(new View.OnClickListener() {
+        btnSubmitFriendSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mUsersDatabaseReference.orderByChild("email").equalTo(mEtFriendSearch.getText().toString()).addValueEventListener(new ValueEventListener() {
+                mUsersDatabaseReference.orderByChild("email").equalTo(etFriendSearch.getText().toString()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         try {
                             DataSnapshot friendFound = dataSnapshot.getChildren().iterator().next();
                             User friend = friendFound.getValue(User.class);
-                            mTvFriendSearchResult.setText(friend.getName());
+                            tvFriendSearchResult.setText(friend.getName());
+                            btnAddFriend.setVisibility(View.VISIBLE);
 
                         } catch (NoSuchElementException e) {
-                            mTvFriendSearchResult.setText(R.string.user_not_found);
+                            tvFriendSearchResult.setText(R.string.user_not_found);
+                            btnAddFriend.setVisibility(View.GONE);
                         }
                     }
 
