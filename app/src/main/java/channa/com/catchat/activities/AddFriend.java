@@ -47,10 +47,10 @@ public class AddFriend extends AppCompatActivity {
         ButterKnife.bind(this);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
+        user = mFirebaseAuth.getCurrentUser();
+
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mUsersDatabaseReference = mFirebaseDatabase.getReference().child("users");
-
-        user = mFirebaseAuth.getCurrentUser();
 
         btnFriendSearchSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
