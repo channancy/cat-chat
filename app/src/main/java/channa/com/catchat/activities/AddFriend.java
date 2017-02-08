@@ -33,6 +33,7 @@ public class AddFriend extends AppCompatActivity {
     private DatabaseReference mUsersDatabaseReference;
     private FirebaseUser user;
     private User friend;
+    private String friendKey;
 
     @BindView(R.id.et_friend_search) EditText etFriendSearch;
     @BindView(R.id.btn_friend_search_submit) Button btnFriendSearchSubmit;
@@ -60,6 +61,7 @@ public class AddFriend extends AppCompatActivity {
                         try {
                             DataSnapshot friendFound = dataSnapshot.getChildren().iterator().next();
                             friend = friendFound.getValue(User.class);
+                            friendKey = friendFound.getKey();
                             tvFriendSearchResult.setText(friend.getName());
                             btnAddFriend.setVisibility(View.VISIBLE);
 
@@ -81,9 +83,10 @@ public class AddFriend extends AppCompatActivity {
         btnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatabaseReference userRef = mUsersDatabaseReference.child(user.getUid() + "/friends");
+                DatabaseReference mContactsDatabaseReference = mFirebaseDatabase.getReference().child("contacts");
+                DatabaseReference userRef = mContactsDatabaseReference.child(user.getUid());
                 Map<String, Object> userUpdate = new HashMap<String, Object>();
-                userUpdate.put("comrades", friend.getEmail());
+                userUpdate.put(friendKey, friend.getName());
                 userRef.updateChildren(userUpdate);
             }
         });
