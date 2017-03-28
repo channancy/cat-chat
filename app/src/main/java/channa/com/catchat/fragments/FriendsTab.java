@@ -16,6 +16,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.NoSuchElementException;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import channa.com.catchat.R;
@@ -32,7 +34,8 @@ public class FriendsTab extends Fragment {
     private DatabaseReference mContactsDatabaseReference;
     private FirebaseUser user;
 
-    @BindView(R.id.tv_friend_name) TextView tvFriendName;
+    @BindView(R.id.tv_friend_name)
+    TextView tvFriendName;
 
     public FriendsTab() {
         // Required empty public constructor
@@ -54,8 +57,13 @@ public class FriendsTab extends Fragment {
         listRef.orderByValue().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                DataSnapshot friendFound = dataSnapshot.getChildren().iterator().next();
-                tvFriendName.setText(friendFound.getValue().toString());
+                try {
+                    DataSnapshot friendFound = dataSnapshot.getChildren().iterator().next();
+                    tvFriendName.setText(friendFound.getValue().toString());
+
+                } catch (NoSuchElementException e) {
+                    tvFriendName.setText("No friends yet");
+                }
             }
 
             @Override
