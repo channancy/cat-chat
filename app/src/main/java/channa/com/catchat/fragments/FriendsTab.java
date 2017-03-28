@@ -3,6 +3,7 @@ package channa.com.catchat.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +51,7 @@ public class FriendsTab extends Fragment {
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         user = mFirebaseAuth.getCurrentUser();
+        Log.d(TAG, "user.getUid(): " + user.getUid());
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mContactsDatabaseReference = mFirebaseDatabase.getReference().child("contacts");
