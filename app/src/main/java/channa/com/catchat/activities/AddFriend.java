@@ -86,7 +86,7 @@ public class AddFriend extends AppCompatActivity {
                 DatabaseReference mContactsDatabaseReference = mFirebaseDatabase.getReference().child("contacts");
                 DatabaseReference userRef = mContactsDatabaseReference.child(user.getUid());
                 Map<String, Object> userUpdate = new HashMap<String, Object>();
-                userUpdate.put(friendKey, friend.getName());
+                userUpdate.put("name", friend.getName());
                 userRef.updateChildren(userUpdate);
             }
         });
