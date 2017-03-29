@@ -2,46 +2,58 @@ package channa.com.catchat.models;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by Nancy on 1/22/2017.
  */
 
 public class User {
-    private String mName;
-    private String mEmail;
-    private JSONObject mFriends;
+    private String name;
+    private String email;
+    private JSONObject friendList;
 
     public User() {
 
     }
 
-    public User(String name, String email, JSONObject friends) {
-        this.mName = name;
-        this.mEmail = email;
-        this.mFriends = friends;
+    public User(String name, String email, JSONObject friendList) {
+        this.name = name;
+        this.email = email;
+        this.friendList = friendList;
     }
 
     public String getName() {
-        return mName;
+        return name;
     }
 
     public void setName(String name) {
-        mName = name;
+        this.name = name;
     }
 
     public String getEmail() {
-        return mEmail;
+        return email;
     }
 
     public void setEmail(String email) {
-        mEmail = email;
+        this.email = email;
     }
 
-    public JSONObject getFriends() {
-        return mFriends;
+    public JSONObject getFriendList() {
+        return friendList;
     }
 
-    public void setFriends(JSONObject friends) {
-        mFriends = friends;
+    public void setFriendList(JSONObject friendList) {
+        friendList = friendList;
+    }
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("name", name);
+        result.put("email", email);
+        result.put("friendList", friendList);
+
+        return result;
     }
 }

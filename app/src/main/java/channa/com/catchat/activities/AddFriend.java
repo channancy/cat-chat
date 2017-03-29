@@ -84,10 +84,15 @@ public class AddFriend extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 DatabaseReference mContactsDatabaseReference = mFirebaseDatabase.getReference().child("contacts");
-                DatabaseReference userRef = mContactsDatabaseReference.child(user.getUid());
-                Map<String, Object> userUpdate = new HashMap<String, Object>();
-                userUpdate.put("name", friend.getName());
-                userRef.updateChildren(userUpdate);
+
+                String key = mContactsDatabaseReference.push().getKey();
+                User newFriend = new User(friend.getName(), friend.getEmail(), null);
+                Map<String, Object> friendValues = newFriend.toMap();
+
+                Map<String, Object> childUpdates = new HashMap<>();
+                childUpdates.put("/" + user.getUid() + "/" + key, friendValues);
+
+                mContactsDatabaseReference.updateChildren(childUpdates);
             }
         });
     }
