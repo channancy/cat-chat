@@ -17,13 +17,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import channa.com.catchat.R;
+import channa.com.catchat.adapters.FriendListAdapter;
 import channa.com.catchat.models.User;
 
 /**
@@ -34,11 +35,12 @@ public class FriendsTab extends Fragment {
     private static final String TAG = "FriendsTab";
 
     private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser mUser;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mContactsDatabaseReference;
-    private FirebaseUser user;
-    private List<User> mFriendList;
 
+    private List<User> mFriendList = new ArrayList<>();
+    private FriendListAdapter mFriendListAdapter;
     @BindView(R.id.rv_friend_list) RecyclerView rvFriendList;
 
     public FriendsTab() {
@@ -52,23 +54,28 @@ public class FriendsTab extends Fragment {
         View layout = inflater.inflate(R.layout.fragment_friends_tab, container, false);
         ButterKnife.bind(this, layout);
 
+        // Initialize Firebase components
         mFirebaseAuth = FirebaseAuth.getInstance();
-        user = mFirebaseAuth.getCurrentUser();
-        Log.d(TAG, "user.getUid(): " + user.getUid());
-
         mFirebaseDatabase = FirebaseDatabase.getInstance();
+
+        // Initialize and set RecyclerView adapter
+        mFriendListAdapter = new FriendListAdapter(getActivity());
+        rvFriendList.setAdapter(mFriendListAdapter);
+
+        // Populate RecyclerView
         mContactsDatabaseReference = mFirebaseDatabase.getReference().child("contacts");
-        DatabaseReference listRef = mContactsDatabaseReference.child(user.getUid());
-        listRef.orderByValue().addValueEventListener(new ValueEventListener() {
+        mUser = mFirebaseAuth.getCurrentUser();
+        DatabaseReference listRef = mContactsDatabaseReference.child(mUser.getUid());
+        listRef.orderByChild("name").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
-                    Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
-                    while (iterator.hasNext()) {
-                        DataSnapshot friendFound = iterator.next();
-                        User friendDeserialized = friendFound.getValue(User.class);
-                        mFriendList.add(friendDeserialized);
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        User friend = child.getValue(User.class);
+                        mFriendList.add(friend);
                     }
+
+                    mFriendListAdapter.setFriendList(mFriendList);
 
                 } catch (NoSuchElementException e) {
                     Log.d(TAG, "onDataChange: No friends yet");
@@ -83,5 +90,4 @@ public class FriendsTab extends Fragment {
 
         return layout;
     }
-
 }
