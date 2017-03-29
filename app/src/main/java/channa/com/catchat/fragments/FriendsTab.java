@@ -3,11 +3,11 @@ package channa.com.catchat.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,11 +17,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import channa.com.catchat.R;
+import channa.com.catchat.models.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,9 +37,9 @@ public class FriendsTab extends Fragment {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mContactsDatabaseReference;
     private FirebaseUser user;
+    private List<User> mFriendList;
 
-    @BindView(R.id.tv_friend_name)
-    TextView tvFriendName;
+    @BindView(R.id.rv_friend_list) RecyclerView rvFriendList;
 
     public FriendsTab() {
         // Required empty public constructor
@@ -60,11 +63,15 @@ public class FriendsTab extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
-                    DataSnapshot friendFound = dataSnapshot.getChildren().iterator().next();
-                    tvFriendName.setText(friendFound.getValue().toString());
+                    Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+                    while (iterator.hasNext()) {
+                        DataSnapshot friendFound = iterator.next();
+                        User friendDeserialized = friendFound.getValue(User.class);
+                        mFriendList.add(friendDeserialized);
+                    }
 
                 } catch (NoSuchElementException e) {
-                    tvFriendName.setText("No friends yet");
+                    Log.d(TAG, "onDataChange: No friends yet");
                 }
             }
 
