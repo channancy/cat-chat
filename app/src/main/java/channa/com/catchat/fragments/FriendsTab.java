@@ -3,6 +3,7 @@ package channa.com.catchat.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -58,10 +59,6 @@ public class FriendsTab extends Fragment {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 
-        // Initialize and set RecyclerView adapter
-        mFriendListAdapter = new FriendListAdapter(getActivity());
-        rvFriendList.setAdapter(mFriendListAdapter);
-
         // Populate RecyclerView
         mContactsDatabaseReference = mFirebaseDatabase.getReference().child("contacts");
         mUser = mFirebaseAuth.getCurrentUser();
@@ -73,9 +70,14 @@ public class FriendsTab extends Fragment {
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
                         User friend = child.getValue(User.class);
                         mFriendList.add(friend);
+                        Log.d(TAG, "friend name: " + friend.getName());
                     }
 
+                    // Initialize and set RecyclerView adapter
+                    mFriendListAdapter = new FriendListAdapter(getActivity());
                     mFriendListAdapter.setFriendList(mFriendList);
+                    rvFriendList.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    rvFriendList.setAdapter(mFriendListAdapter);
 
                 } catch (NoSuchElementException e) {
                     Log.d(TAG, "onDataChange: No friends yet");
