@@ -12,11 +12,11 @@ import android.view.ViewGroup;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,8 @@ public class FriendsTab extends Fragment {
 
     private List<User> mFriendList = new ArrayList<>();
     private FriendListAdapter mFriendListAdapter;
-    @BindView(R.id.rv_friend_list) RecyclerView rvFriendList;
+    @BindView(R.id.rv_friend_list)
+    RecyclerView rvFriendList;
 
     public FriendsTab() {
         // Required empty public constructor
@@ -63,15 +64,13 @@ public class FriendsTab extends Fragment {
         mContactsDatabaseReference = mFirebaseDatabase.getReference().child("contacts");
         mUser = mFirebaseAuth.getCurrentUser();
         DatabaseReference listRef = mContactsDatabaseReference.child(mUser.getUid());
-        listRef.orderByChild("name").addValueEventListener(new ValueEventListener() {
+        listRef.orderByChild("name").addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 try {
-                    for (DataSnapshot child : dataSnapshot.getChildren()) {
-                        User friend = child.getValue(User.class);
-                        mFriendList.add(friend);
-                        Log.d(TAG, "friend name: " + friend.getName());
-                    }
+                    User friend = dataSnapshot.getValue(User.class);
+                    mFriendList.add(friend);
+                    Log.d(TAG, "friend name: " + friend.getName());
 
                     // Initialize and set RecyclerView adapter
                     mFriendListAdapter = new FriendListAdapter(getActivity());
@@ -82,6 +81,21 @@ public class FriendsTab extends Fragment {
                 } catch (NoSuchElementException e) {
                     Log.d(TAG, "onDataChange: No friends yet");
                 }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
             }
 
             @Override
