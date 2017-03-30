@@ -36,18 +36,16 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    public static final int DEFAULT_MSG_LENGTH_LIMIT = 1000;
-
     // Arbitrary request code values
     public static final int RC_SIGN_IN = 1;
-
-    private String mUsername;
 
     // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mUsersDatabaseReference;
+
+    private String mUsername;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
