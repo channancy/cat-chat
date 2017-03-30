@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.add_friend_menu:
                 // Add friend
-                Intent intent = new Intent(this, AddFriend.class);
+                Intent intent = new Intent(this, AddFriendActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.sign_out_menu:
