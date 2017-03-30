@@ -14,6 +14,7 @@ import channa.com.catchat.fragments.FriendsTab;
  */
 
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
+
     private final static String TAG = "MyFragmentPagerAdapter";
 
     private final int mNumOfTabs = 2;
