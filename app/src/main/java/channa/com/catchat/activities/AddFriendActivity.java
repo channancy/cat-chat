@@ -28,12 +28,13 @@ public class AddFriendActivity extends AppCompatActivity {
 
     private static final String TAG = "AddFriendActivity";
 
+    // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mUsersDatabaseReference;
-    private FirebaseUser user;
-    private User friend;
-    private String friendKey;
+
+    private User mFriend;
+    private String mFriendID;
 
     @BindView(R.id.et_friend_search) EditText etFriendSearch;
     @BindView(R.id.btn_friend_search_submit) Button btnFriendSearchSubmit;
@@ -46,12 +47,14 @@ public class AddFriendActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_friend);
         ButterKnife.bind(this);
 
+        // Initialize Firebase components
         mFirebaseAuth = FirebaseAuth.getInstance();
-        user = mFirebaseAuth.getCurrentUser();
-
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mUsersDatabaseReference = mFirebaseDatabase.getReference().child("users");
 
+        final FirebaseUser user = mFirebaseAuth.getCurrentUser();
+
+        // Search for friend by email
         btnFriendSearchSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,9 +63,9 @@ public class AddFriendActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         try {
                             DataSnapshot friendFound = dataSnapshot.getChildren().iterator().next();
-                            friend = friendFound.getValue(User.class);
-                            friendKey = friendFound.getKey();
-                            tvFriendSearchResult.setText(friend.getName());
+                            mFriend = friendFound.getValue(User.class);
+                            mFriendID = friendFound.getKey();
+                            tvFriendSearchResult.setText(mFriend.getName());
                             btnAddFriend.setVisibility(View.VISIBLE);
 
                         } catch (NoSuchElementException e) {
@@ -80,17 +83,18 @@ public class AddFriendActivity extends AppCompatActivity {
             }
         });
 
+        // Add friend to contacts
         btnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DatabaseReference mContactsDatabaseReference = mFirebaseDatabase.getReference().child("contacts");
 
-                String key = mContactsDatabaseReference.push().getKey();
-                User newFriend = new User(friend.getName(), friend.getEmail(), null);
+                User newFriend = new User(mFriend.getName(), mFriend.getEmail(), null);
                 Map<String, Object> friendValues = newFriend.toMap();
 
                 Map<String, Object> childUpdates = new HashMap<>();
-                childUpdates.put("/" + user.getUid() + "/" + key, friendValues);
+                // Save friend to /contacts/user-id/friend-user-id
+                childUpdates.put("/" + user.getUid() + "/" + mFriendID, friendValues);
 
                 mContactsDatabaseReference.updateChildren(childUpdates);
             }
