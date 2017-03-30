@@ -62,4 +62,12 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         mFriendList = friendList;
         notifyDataSetChanged();
     }
+
+    public void clear() {
+        if (mFriendList != null) {
+            mFriendList.clear();
+        }
+
+        notifyDataSetChanged();
+    }
 }

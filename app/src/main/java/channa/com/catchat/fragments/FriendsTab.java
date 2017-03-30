@@ -2,6 +2,7 @@ package channa.com.catchat.fragments;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,9 +37,11 @@ public class FriendsTab extends Fragment {
     private static final String TAG = "FriendsTab";
 
     private FirebaseAuth mFirebaseAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
     private FirebaseUser mUser;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mContactsDatabaseReference;
+    private ChildEventListener mChildEventListener;
 
     private List<User> mFriendList = new ArrayList<>();
     private FriendListAdapter mFriendListAdapter;
@@ -59,54 +62,96 @@ public class FriendsTab extends Fragment {
         // Initialize Firebase components
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                mUser = firebaseAuth.getCurrentUser();
+                if (mUser != null) {
+                    // User is signed in
+                    // Populate RecyclerView
+                    mContactsDatabaseReference = mFirebaseDatabase.getReference().child("contacts").child(mUser.getUid());
+                    attachDatabaseReadListener();
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + mUser.getDisplayName());
+                } else {
+                    // User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                    detachDatabaseReadListener();
+                    mFriendListAdapter.clear();
+                }
+                // ...
+            }
+        };
 
         // Initialize adapter and set layout manager
         mFriendListAdapter = new FriendListAdapter(getActivity());
         rvFriendList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        // Populate RecyclerView
-        mContactsDatabaseReference = mFirebaseDatabase.getReference().child("contacts");
-        mUser = mFirebaseAuth.getCurrentUser();
-        DatabaseReference listRef = mContactsDatabaseReference.child(mUser.getUid());
-        listRef.orderByChild("name").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                try {
-                    // Deserialize from database to object
-                    User friend = dataSnapshot.getValue(User.class);
-                    mFriendList.add(friend);
-                    Log.d(TAG, "friend name: " + friend.getName());
-
-                    // Set data and adapter
-                    mFriendListAdapter.setFriendList(mFriendList);
-                    rvFriendList.setAdapter(mFriendListAdapter);
-
-                } catch (NoSuchElementException e) {
-                    Log.d(TAG, "onDataChange: No friends yet");
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
         return layout;
+    }
+
+    public void attachDatabaseReadListener() {
+        if (mChildEventListener == null) {
+            mChildEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    try {
+                        // Deserialize from database to object
+                        User friend = dataSnapshot.getValue(User.class);
+                        mFriendList.add(friend);
+                        Log.d(TAG, "friend name: " + friend.getName());
+
+                        // Set data and adapter
+                        mFriendListAdapter.setFriendList(mFriendList);
+                        rvFriendList.setAdapter(mFriendListAdapter);
+
+                    } catch (NoSuchElementException e) {
+                        Log.d(TAG, "onDataChange: No friends yet");
+                    }
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+
+            mContactsDatabaseReference.addChildEventListener(mChildEventListener);
+        }
+    }
+
+    public void detachDatabaseReadListener() {
+        if (mChildEventListener != null) {
+            mContactsDatabaseReference.removeEventListener(mChildEventListener);
+            mChildEventListener = null;
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
     }
 }
