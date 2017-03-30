@@ -20,8 +20,11 @@ import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 
@@ -56,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Set up TabLayout with ViewPager
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), MainActivity.this));
 
@@ -65,19 +69,39 @@ public class MainActivity extends AppCompatActivity {
         // Initialize Firebase components
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-
         mUsersDatabaseReference = mFirebaseDatabase.getReference().child("users");
 
+        // Check for user
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
+                final FirebaseUser user = firebaseAuth.getCurrentUser();
                 // Signed in
                 if (user != null) {
                     onSignedInInitialize(user.getDisplayName());
                     Log.d(TAG, "onAuthStateChanged: " + user.getEmail());
-                    User saveUser = new User(user.getDisplayName(), user.getEmail(), null);
-                    mUsersDatabaseReference.child(user.getUid()).setValue(saveUser);
+
+                    // Check if user is in database
+                    mUsersDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            // Existing user
+                            if (dataSnapshot.hasChild(user.getUid())) {
+                                Log.d(TAG, "existing user");
+                            }
+                            // New user
+                            else {
+                                User saveUser = new User(user.getDisplayName(), user.getEmail(), null);
+                                mUsersDatabaseReference.child(user.getUid()).setValue(saveUser);
+                                Log.d(TAG, "new user");
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
                 // Signed out
                 else {
@@ -119,19 +143,11 @@ public class MainActivity extends AppCompatActivity {
     private void onSignedInInitialize(String username) {
         mUsername = username;
         Log.d(TAG, "onSignedInInitialize: " + mUsername);
-
-        // Attach listener here because database rules say only authenticated users can access
-        // attachDatabaseReadListener();
     }
 
     private void onSignedOutCleanup() {
         // Unset username
         mUsername = null;
-
-        // If do not clear, see messages even though not signed in,
-        // also a bug in which see duplicate messages when signing in/out
-        // mMessageAdapter.clear();
-        // detachDatabaseReadListener();
     }
 
     @Override
@@ -141,11 +157,6 @@ public class MainActivity extends AppCompatActivity {
         if (mAuthStateListener != null) {
             mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
         }
-
-        // If signed in, triggers onSignInInitialize which attaches database listener so also detach and clear adapter here
-        // Also ensures that when activity destroyed (even when nothing to do with sign out like app rotation), still cleanup
-        // detachDatabaseReadListener();
-        // mMessageAdapter.clear();
     }
 
     @Override
