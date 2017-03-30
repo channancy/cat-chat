@@ -24,9 +24,9 @@ import butterknife.ButterKnife;
 import channa.com.catchat.R;
 import channa.com.catchat.models.User;
 
-public class AddFriend extends AppCompatActivity {
+public class AddFriendActivity extends AppCompatActivity {
 
-    private static final String TAG = "AddFriend";
+    private static final String TAG = "AddFriendActivity";
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseDatabase mFirebaseDatabase;
