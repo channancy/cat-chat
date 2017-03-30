@@ -27,6 +27,7 @@ import java.util.Arrays;
 
 import channa.com.catchat.R;
 import channa.com.catchat.adapters.MyFragmentPagerAdapter;
+import channa.com.catchat.models.User;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 if (user != null) {
                     onSignedInInitialize(user.getDisplayName());
                     Log.d(TAG, "onAuthStateChanged: " + user.getEmail());
-                    channa.com.catchat.models.User saveUser = new channa.com.catchat.models.User(user.getDisplayName(), user.getEmail(), null);
+                    User saveUser = new User(user.getDisplayName(), user.getEmail(), null);
                     mUsersDatabaseReference.child(user.getUid()).setValue(saveUser);
                 }
                 // Signed out

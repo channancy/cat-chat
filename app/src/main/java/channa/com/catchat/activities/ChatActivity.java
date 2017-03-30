@@ -1,8 +1,13 @@
 package channa.com.catchat.activities;
 
-/**
- * Created by Nancy on 3/29/2017.
- */
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 
-public class ChatActivity {
+public class ChatActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_chat);
+    }
 }

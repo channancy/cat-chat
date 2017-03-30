@@ -1,7 +1,5 @@
 package channa.com.catchat.models;
 
-import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,16 +10,16 @@ import java.util.Map;
 public class User {
     private String name;
     private String email;
-    private JSONObject friendList;
+    private String avatarUrl;
 
     public User() {
 
     }
 
-    public User(String name, String email, JSONObject friendList) {
+    public User(String name, String email, String avatarUrl) {
         this.name = name;
         this.email = email;
-        this.friendList = friendList;
+        this.avatarUrl = avatarUrl;
     }
 
     public String getName() {
@@ -40,19 +38,19 @@ public class User {
         this.email = email;
     }
 
-    public JSONObject getFriendList() {
-        return friendList;
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
-    public void setFriendList(JSONObject friendList) {
-        friendList = friendList;
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("name", name);
         result.put("email", email);
-        result.put("friendList", friendList);
+        result.put("avatarUrl", avatarUrl);
 
         return result;
     }
