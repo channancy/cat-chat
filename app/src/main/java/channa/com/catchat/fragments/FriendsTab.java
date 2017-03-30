@@ -60,6 +60,10 @@ public class FriendsTab extends Fragment {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 
+        // Initialize adapter and set layout manager
+        mFriendListAdapter = new FriendListAdapter(getActivity());
+        rvFriendList.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         // Populate RecyclerView
         mContactsDatabaseReference = mFirebaseDatabase.getReference().child("contacts");
         mUser = mFirebaseAuth.getCurrentUser();
@@ -68,14 +72,13 @@ public class FriendsTab extends Fragment {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 try {
+                    // Deserialize from database to object
                     User friend = dataSnapshot.getValue(User.class);
                     mFriendList.add(friend);
                     Log.d(TAG, "friend name: " + friend.getName());
 
-                    // Initialize and set RecyclerView adapter
-                    mFriendListAdapter = new FriendListAdapter(getActivity());
+                    // Set data and adapter
                     mFriendListAdapter.setFriendList(mFriendList);
-                    rvFriendList.setLayoutManager(new LinearLayoutManager(getActivity()));
                     rvFriendList.setAdapter(mFriendListAdapter);
 
                 } catch (NoSuchElementException e) {
