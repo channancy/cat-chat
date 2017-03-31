@@ -2,6 +2,8 @@ package channa.com.catchat.adapters;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -89,6 +91,16 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
     }
 
     private void showDialog(String friendName) {
+        // DialogFragment.show() will take care of adding the fragment
+        // in a transaction.  We also want to remove any currently showing
+        // dialog, so make our own transaction and take care of that here.
+        FragmentTransaction ft = ((Activity) mContext).getFragmentManager().beginTransaction();
+        Fragment prev = ((Activity) mContext).getFragmentManager().findFragmentByTag("FriendDialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
         DialogFragment newFragment = FriendDialog.newInstance(friendName);
         newFragment.show(((Activity) mContext).getFragmentManager(), "FriendDialog");
     }
