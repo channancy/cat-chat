@@ -21,7 +21,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,9 +35,9 @@ public class FriendsTab extends Fragment {
 
     private static final String TAG = "FriendsTab";
 
+    // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
-    private FirebaseUser mUser;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mContactsDatabaseReference;
     private ChildEventListener mChildEventListener;
@@ -65,20 +64,22 @@ public class FriendsTab extends Fragment {
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                mUser = firebaseAuth.getCurrentUser();
-                if (mUser != null) {
-                    // User is signed in
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                // Signed in
+                if (user != null) {
                     // Populate RecyclerView
-                    mContactsDatabaseReference = mFirebaseDatabase.getReference().child("contacts").child(mUser.getUid());
+                    mContactsDatabaseReference = mFirebaseDatabase.getReference().child("contacts").child(user.getUid());
                     attachDatabaseReadListener();
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + mUser.getDisplayName());
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
+
+                    Log.d(TAG, "onAuthStateChanged: signed in: " + user.getDisplayName());
+                }
+                // User is signed out
+                else {
                     detachDatabaseReadListener();
                     mFriendListAdapter.clear();
+
+                    Log.d(TAG, "onAuthStateChanged: signed out: ");
                 }
-                // ...
             }
         };
 
@@ -94,19 +95,14 @@ public class FriendsTab extends Fragment {
             mChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    try {
-                        // Deserialize from database to object
-                        User friend = dataSnapshot.getValue(User.class);
-                        mFriendList.add(friend);
-                        Log.d(TAG, "friend name: " + friend.getName());
+                    // Deserialize from database to object
+                    User friend = dataSnapshot.getValue(User.class);
+                    mFriendList.add(friend);
+                    Log.d(TAG, "friend name: " + friend.getName());
 
-                        // Set data and adapter
-                        mFriendListAdapter.setFriendList(mFriendList);
-                        rvFriendList.setAdapter(mFriendListAdapter);
-
-                    } catch (NoSuchElementException e) {
-                        Log.d(TAG, "onDataChange: No friends yet");
-                    }
+                    // Set data and adapter
+                    mFriendListAdapter.setFriendList(mFriendList);
+                    rvFriendList.setAdapter(mFriendListAdapter);
                 }
 
                 @Override
@@ -130,7 +126,8 @@ public class FriendsTab extends Fragment {
                 }
             };
 
-            mContactsDatabaseReference.addChildEventListener(mChildEventListener);
+            // Order by friend name
+            mContactsDatabaseReference.orderByChild("name").addChildEventListener(mChildEventListener);
         }
     }
 
