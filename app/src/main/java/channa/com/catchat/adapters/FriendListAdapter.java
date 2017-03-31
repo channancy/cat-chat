@@ -2,6 +2,7 @@ package channa.com.catchat.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import channa.com.catchat.models.User;
  */
 
 public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.ViewHolder> {
+
+    private final static String TAG = "FriendListAdapter";
 
     private Context mContext;
     private LayoutInflater mLayoutInflater;
@@ -46,7 +49,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         return mFriendList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView friendAvatar;
         TextView friendName;
 
@@ -55,6 +58,15 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
 
             friendAvatar = (ImageView) itemView.findViewById(R.id.iv_friend_avatar);
             friendName = (TextView) itemView.findViewById(R.id.tv_friend_name);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            User friend = mFriendList.get(getAdapterPosition());
+
+            Log.d(TAG, "onClick: " + friend.getName());
         }
     }
 
