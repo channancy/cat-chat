@@ -32,6 +32,10 @@ import channa.com.catchat.R;
 import channa.com.catchat.adapters.MyFragmentPagerAdapter;
 import channa.com.catchat.models.User;
 
+/**
+ * https://www.udacity.com/course/firebase-in-a-weekend-by-google-android--ud0352
+ */
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";

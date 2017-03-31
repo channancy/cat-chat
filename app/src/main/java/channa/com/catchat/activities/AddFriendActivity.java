@@ -24,6 +24,10 @@ import butterknife.ButterKnife;
 import channa.com.catchat.R;
 import channa.com.catchat.models.User;
 
+/**
+ * https://firebase.google.com/docs/database/android/read-and-write
+ */
+
 public class AddFriendActivity extends AppCompatActivity {
 
     private static final String TAG = "AddFriendActivity";

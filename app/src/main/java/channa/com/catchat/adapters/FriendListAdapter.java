@@ -19,6 +19,7 @@ import channa.com.catchat.models.User;
 
 /**
  * Created by Nancy on 3/28/2017.
+ * http://stackoverflow.com/questions/18689727/getfragmentmanager-from-arrayadapter
  */
 
 public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.ViewHolder> {
