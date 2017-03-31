@@ -1,5 +1,7 @@
 package channa.com.catchat.adapters;
 
+import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import channa.com.catchat.R;
+import channa.com.catchat.fragments.FriendDialog;
 import channa.com.catchat.models.User;
 
 /**
@@ -67,6 +70,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
             User friend = mFriendList.get(getAdapterPosition());
 
             Log.d(TAG, "onClick: " + friend.getName());
+            showDialog();
         }
     }
 
@@ -81,5 +85,10 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         }
 
         notifyDataSetChanged();
+    }
+
+    public void showDialog() {
+        DialogFragment newFragment = FriendDialog.newInstance(R.string.friend);
+        newFragment.show(((Activity) mContext).getFragmentManager(), "dialog");
     }
 }
