@@ -19,10 +19,10 @@ public class FriendDialog extends DialogFragment {
 
     private final static String TAG = "FriendDialog";
 
-    public static FriendDialog newInstance(int title) {
+    public static FriendDialog newInstance(String title) {
         FriendDialog frag = new FriendDialog();
         Bundle args = new Bundle();
-        args.putInt("title", title);
+        args.putString("title", title);
         frag.setArguments(args);
         return frag;
     }
@@ -30,7 +30,7 @@ public class FriendDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        int title = getArguments().getInt("title");
+        String title = getArguments().getString("title");
 
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();

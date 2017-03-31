@@ -70,7 +70,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
             User friend = mFriendList.get(getAdapterPosition());
 
             Log.d(TAG, "onClick: " + friend.getName());
-            showDialog();
+            showDialog(friend.getName());
         }
     }
 
@@ -87,8 +87,8 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         notifyDataSetChanged();
     }
 
-    public void showDialog() {
-        DialogFragment newFragment = FriendDialog.newInstance(R.string.friend);
-        newFragment.show(((Activity) mContext).getFragmentManager(), "dialog");
+    private void showDialog(String friendName) {
+        DialogFragment newFragment = FriendDialog.newInstance(friendName);
+        newFragment.show(((Activity) mContext).getFragmentManager(), "FriendDialog");
     }
 }
