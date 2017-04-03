@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             // New user
                             else {
-                                User saveUser = new User(user.getDisplayName(), user.getEmail(), null);
+                                User saveUser = new User(user.getUid(), user.getDisplayName(), user.getEmail(), null);
                                 mUsersDatabaseReference.child(user.getUid()).setValue(saveUser);
                                 Log.d(TAG, "new user");
                             }
