@@ -71,7 +71,6 @@ public class FriendsTab extends Fragment {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 // Signed in
                 if (user != null) {
-                    // Populate RecyclerView
                     mContactsDatabaseReference = mFirebaseDatabase.getReference().child("contacts").child(user.getUid());
 
                     mContactsDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -80,6 +79,8 @@ public class FriendsTab extends Fragment {
                             // Friend list has contacts
                             if (dataSnapshot.hasChildren()) {
                                 tvFriendListEmpty.setVisibility(View.GONE);
+
+                                // Populate RecyclerView
                                 attachDatabaseReadListener();
 
                                 Log.d(TAG, "onDataChange: has friends");
