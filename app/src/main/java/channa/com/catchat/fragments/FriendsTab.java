@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,6 +19,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,8 @@ public class FriendsTab extends Fragment {
     private FriendListAdapter mFriendListAdapter;
     @BindView(R.id.rv_friend_list)
     RecyclerView rvFriendList;
+    @BindView(R.id.tv_friend_list_empty)
+    TextView tvFriendListEmpty;
 
     public FriendsTab() {
         // Required empty public constructor
@@ -69,7 +73,30 @@ public class FriendsTab extends Fragment {
                 if (user != null) {
                     // Populate RecyclerView
                     mContactsDatabaseReference = mFirebaseDatabase.getReference().child("contacts").child(user.getUid());
-                    attachDatabaseReadListener();
+
+                    mContactsDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            // Friend list has contacts
+                            if (dataSnapshot.hasChildren()) {
+                                tvFriendListEmpty.setVisibility(View.GONE);
+                                attachDatabaseReadListener();
+
+                                Log.d(TAG, "onDataChange: has friends");
+                            }
+                            // Empty friend list
+                            else {
+                                tvFriendListEmpty.setVisibility(View.VISIBLE);
+
+                                Log.d(TAG, "onDataChange: no friends");
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
                     Log.d(TAG, "onAuthStateChanged: signed in: " + user.getDisplayName());
                 }

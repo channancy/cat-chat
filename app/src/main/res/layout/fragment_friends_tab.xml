@@ -7,7 +7,13 @@
     <android.support.v7.widget.RecyclerView android:id="@+id/rv_friend_list"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content">
-
     </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/tv_friend_list_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/no_friends_yet"
+        android:visibility="gone"/>
 
 </FrameLayout>
