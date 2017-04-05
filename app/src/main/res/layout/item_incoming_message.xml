@@ -11,9 +11,9 @@
         android:src="@drawable/com_facebook_button_icon_blue"/>
 
     <TextView
-        android:id="@+id/tv_my_message"
+        android:id="@+id/tv_friend_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hey there!"/>
+        android:text="Friend: Hey there!"/>
 
 </LinearLayout>

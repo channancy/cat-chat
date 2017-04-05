@@ -53,7 +53,16 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        Message message = mMessages.get(position);
 
+        switch (message.getType()) {
+            case INCOMING:
+                ((MyMessageHolder) holder).myMessage.setText(message.getText());
+                break;
+            case OUTGOING:
+                ((FriendMessageHolder) holder).friendMessage.setText(message.getText());
+                break;
+        }
     }
 
     @Override
@@ -68,26 +77,24 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public class MyMessageHolder extends RecyclerView.ViewHolder {
-        ImageView friendAvatar;
-        TextView friendName;
+        TextView myMessage;
 
         public MyMessageHolder (View itemView) {
             super(itemView);
 
-            friendAvatar = (ImageView) itemView.findViewById(R.id.iv_friend_avatar);
-            friendName = (TextView) itemView.findViewById(R.id.tv_friend_name);
+            myMessage = (TextView) itemView.findViewById(R.id.tv_friend_message);
         }
     }
 
     public class FriendMessageHolder extends RecyclerView.ViewHolder {
         ImageView friendAvatar;
-        TextView friendName;
+        TextView friendMessage;
 
         public FriendMessageHolder (View itemView) {
             super(itemView);
 
-            friendAvatar = (ImageView) itemView.findViewById(R.id.iv_friend_avatar);
-            friendName = (TextView) itemView.findViewById(R.id.tv_friend_name);
+            friendAvatar = (ImageView) itemView.findViewById(R.id.iv_friend_avatar_message);
+            friendMessage = (TextView) itemView.findViewById(R.id.tv_friend_message);
         }
     }
 }
