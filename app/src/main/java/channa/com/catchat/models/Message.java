@@ -6,20 +6,25 @@ package channa.com.catchat.models;
 
 public class Message {
 
+    public static final int INCOMING = 0;
+    public static final int OUTGOING = 1;
+
     private String avatarUrl;
     private String name;
     private String text;
     private String photoUrl;
+    private int type;
 
     public Message() {
 
     }
 
-    public Message(String avatarUrl, String name, String text, String photoUrl) {
+    public Message(String avatarUrl, String name, String text, String photoUrl, int type) {
         this.avatarUrl = avatarUrl;
         this.name = name;
         this.text = text;
         this.photoUrl = photoUrl;
+        this.type = type;
     }
 
     public String getAvatarUrl() {
@@ -52,5 +57,13 @@ public class Message {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }
