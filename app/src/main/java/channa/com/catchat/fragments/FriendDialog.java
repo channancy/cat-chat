@@ -52,12 +52,21 @@ public class FriendDialog extends DialogFragment {
         TextView tvTitle = (TextView) v.findViewById(R.id.tv_friend_dialog_title);
         tvTitle.setText(friendName);
 
-        // Watch for button clicks.
-        Button button = (Button)v.findViewById(R.id.btn_friend_dialog_chat);
+        // Click Chat
+        Button button = (Button) v.findViewById(R.id.btn_friend_dialog_chat);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // When button is clicked, call up to owning activity.
                 Log.d(TAG, "clicked chat");
+
+                // User keys exist under members
+
+                    // Load messages
+
+                // Users keys do not exist under members
+
+                    // Create under members
+
+                    // Create under messages
             }
         });
 
