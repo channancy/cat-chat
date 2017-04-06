@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- http://www.tutorialsface.com/2015/08/building-your-own-android-chat-messenger-app-similar-to-whatsapp-using-xmpp-smack-4-1-api-from-scratch-part-1/ -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
+              android:layout_gravity="start"
+              android:background="@drawable/bubble_left"
               android:orientation="horizontal">
 
     <ImageView
