@@ -73,7 +73,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
             User friend = mFriendList.get(getAdapterPosition());
 
             Log.d(TAG, "onClick: " + friend.getName());
-            showDialog(friend.getName());
+            showDialog(friend.getId(), friend.getName(), friend.getAvatarUrl());
         }
     }
 
@@ -90,7 +90,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         notifyDataSetChanged();
     }
 
-    private void showDialog(String friendName) {
+    private void showDialog(String friendID, String friendName, String friendAvatar) {
         // DialogFragment.show() will take care of adding the fragment
         // in a transaction.  We also want to remove any currently showing
         // dialog, so make our own transaction and take care of that here.
@@ -101,7 +101,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         }
         ft.addToBackStack(null);
 
-        DialogFragment newFragment = FriendDialog.newInstance(friendName);
+        DialogFragment newFragment = FriendDialog.newInstance(friendID, friendName, friendAvatar);
         newFragment.show(((Activity) mContext).getFragmentManager(), "FriendDialog");
     }
 }

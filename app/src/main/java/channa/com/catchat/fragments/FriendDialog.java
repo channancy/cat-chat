@@ -22,10 +22,12 @@ public class FriendDialog extends DialogFragment {
 
     private final static String TAG = "FriendDialog";
 
-    public static FriendDialog newInstance(String title) {
+    public static FriendDialog newInstance(String friendID, String friendName, String friendAvatar) {
         FriendDialog frag = new FriendDialog();
         Bundle args = new Bundle();
-        args.putString("title", title);
+        args.putString("friendID", friendID);
+        args.putString("friendName", friendName);
+        args.putString("friendAvatar", friendAvatar);
         frag.setArguments(args);
         return frag;
     }
@@ -42,11 +44,13 @@ public class FriendDialog extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        String title = getArguments().getString("title");
+        String friendID = getArguments().getString("friendID");
+        String friendName = getArguments().getString("friendName");
+        String friendAvatar = getArguments().getString("friendAvatar");
 
         View v = inflater.inflate(R.layout.fragment_friend_dialog, container, false);
         TextView tvTitle = (TextView) v.findViewById(R.id.tv_friend_dialog_title);
-        tvTitle.setText(title);
+        tvTitle.setText(friendName);
 
         // Watch for button clicks.
         Button button = (Button)v.findViewById(R.id.btn_friend_dialog_chat);
