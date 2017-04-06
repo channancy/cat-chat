@@ -101,7 +101,7 @@ public class FriendsTab extends Fragment {
 
                     Log.d(TAG, "onAuthStateChanged: signed in: " + user.getDisplayName());
                 }
-                // User is signed out
+                // Signed out
                 else {
                     detachDatabaseReadListener();
                     mFriendListAdapter.clear();
