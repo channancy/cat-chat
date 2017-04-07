@@ -89,16 +89,43 @@ public class FriendDialog extends DialogFragment {
                         Log.d(TAG, "userID: " + userID);
                         Log.d(TAG, "friendID: " + friendID);
 
-                        // User keys exist under members
-                        if (dataSnapshot.hasChild(userID) && dataSnapshot.hasChild(friendID)) {
-                            Log.d(TAG, "existing chat");
+                        if (dataSnapshot.exists()) {
+                            for (DataSnapshot child : dataSnapshot.getChildren()) {
+//                            Log.d(TAG, "child: " + child.getKey());
 
-                            // Load messages
+                                // User keys exist under members
+                                if (child.hasChild(userID) && child.hasChild(friendID)) {
+                                    Log.d(TAG, "existing chat");
+
+                                    // Load messages
+                                }
+                                // Users keys do not exist under members
+                                else {
+                                    Log.d(TAG, "new chat");
+
+                                    // Create set of members
+                                    String key = mMembersDatabaseReference.push().getKey();
+                                    mMemberIDList.put(userID, true);
+                                    mMemberIDList.put(friendID, true);
+
+                                    // members/chat-id/map-of-members
+                                    // members
+                                    // - 123456
+                                    // -- 234567: true
+                                    // -- 345678: true
+                                    Map<String, Object> childUpdates = new HashMap<>();
+                                    childUpdates.put(key, mMemberIDList);
+
+                                    // Update under members
+                                    mMembersDatabaseReference.updateChildren(childUpdates);
+
+                                    // Update under messages
+                                    mMessagesDatabaseReference.updateChildren(childUpdates);
+                                }
+                            }
+
                         }
-                        // Users keys do not exist under members
                         else {
-                            Log.d(TAG, "new chat");
-
                             // Create set of members
                             String key = mMembersDatabaseReference.push().getKey();
                             mMemberIDList.put(userID, true);
