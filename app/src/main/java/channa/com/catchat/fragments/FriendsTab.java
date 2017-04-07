@@ -71,14 +71,19 @@ public class FriendsTab extends Fragment {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 // Signed in
                 if (user != null) {
-                    mContactsDatabaseReference = mFirebaseDatabase.getReference().child("contacts").child(user.getUid());
+                    final String userID = user.getUid();
 
+                    mContactsDatabaseReference = mFirebaseDatabase.getReference().child("contacts").child(user.getUid());
                     mContactsDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             // Friend list has contacts
                             if (dataSnapshot.hasChildren()) {
                                 tvFriendListEmpty.setVisibility(View.GONE);
+
+                                // Initialize adapter and set layout manager
+                                mFriendListAdapter = new FriendListAdapter(getActivity(), userID);
+                                rvFriendList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
                                 // Populate RecyclerView
                                 attachDatabaseReadListener();
@@ -110,10 +115,6 @@ public class FriendsTab extends Fragment {
                 }
             }
         };
-
-        // Initialize adapter and set layout manager
-        mFriendListAdapter = new FriendListAdapter(getActivity());
-        rvFriendList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         return layout;
     }

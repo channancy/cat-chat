@@ -10,7 +10,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import channa.com.catchat.R;
+import channa.com.catchat.models.Members;
 
 /**
  * Created by Nancy on 3/30/2017.
@@ -22,13 +34,22 @@ public class FriendDialog extends DialogFragment {
 
     private final static String TAG = "FriendDialog";
 
-    public static FriendDialog newInstance(String friendID, String friendName, String friendAvatar) {
+    // Firebase instance variables
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mMembersDatabaseReference;
+    private DatabaseReference mMessagesDatabaseReference;
+
+    private List<String> mMemberIDList = new ArrayList<>();
+
+    public static FriendDialog newInstance(String userID, String friendID, String friendName, String friendAvatar) {
         FriendDialog frag = new FriendDialog();
         Bundle args = new Bundle();
+        args.putString("userID", userID);
         args.putString("friendID", friendID);
         args.putString("friendName", friendName);
         args.putString("friendAvatar", friendAvatar);
         frag.setArguments(args);
+
         return frag;
     }
 
@@ -39,12 +60,19 @@ public class FriendDialog extends DialogFragment {
         // setStyle(style, theme)
         // Optional custom theme. If 0, an appropriate theme (based on the style) will be selected for you.
         setStyle(DialogFragment.STYLE_NORMAL, 0);
+
+        // Initialize Firebase components
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mMembersDatabaseReference = mFirebaseDatabase.getReference().child("members");
+        mMessagesDatabaseReference = mFirebaseDatabase.getReference().child("messages");
+
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        String friendID = getArguments().getString("friendID");
+        final String userID = getArguments().getString("userID");
+        final String friendID = getArguments().getString("friendID");
         String friendName = getArguments().getString("friendName");
         String friendAvatar = getArguments().getString("friendAvatar");
 
@@ -58,15 +86,45 @@ public class FriendDialog extends DialogFragment {
             public void onClick(View v) {
                 Log.d(TAG, "clicked chat");
 
-                // User keys exist under members
+                mMembersDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.d(TAG, "userID: " + userID);
+                        Log.d(TAG, "friendID: " + friendID);
 
-                    // Load messages
+                        // User keys exist under members
+                        if (dataSnapshot.hasChild(userID) && dataSnapshot.hasChild(friendID)) {
+                            Log.d(TAG, "existing chat");
 
-                // Users keys do not exist under members
+                            // Load messages
+                        }
+                        // Users keys do not exist under members
+                        else {
+                            Log.d(TAG, "new chat");
 
-                    // Create under members
+                            // Create set of members
+                            String key = mMembersDatabaseReference.push().getKey();
+                            mMemberIDList.add(userID);
+                            mMemberIDList.add(friendID);
+                            Members members = new Members(mMemberIDList);
+                            Map<String, Object> memberValues = members.toMap();
 
-                    // Create under messages
+                            Map<String, Object> childUpdates = new HashMap<>();
+                            childUpdates.put(key, memberValues);
+
+                            // Update under members
+                            mMembersDatabaseReference.updateChildren(childUpdates);
+
+                            // Update under messages
+                            mMessagesDatabaseReference.updateChildren(childUpdates);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 
