@@ -16,13 +16,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import channa.com.catchat.R;
-import channa.com.catchat.models.Members;
 
 /**
  * Created by Nancy on 3/30/2017.
@@ -39,7 +36,7 @@ public class FriendDialog extends DialogFragment {
     private DatabaseReference mMembersDatabaseReference;
     private DatabaseReference mMessagesDatabaseReference;
 
-    private List<String> mMemberIDList = new ArrayList<>();
+    private Map<String, Boolean> mMemberIDList = new HashMap<>();
 
     public static FriendDialog newInstance(String userID, String friendID, String friendName, String friendAvatar) {
         FriendDialog frag = new FriendDialog();
@@ -104,13 +101,16 @@ public class FriendDialog extends DialogFragment {
 
                             // Create set of members
                             String key = mMembersDatabaseReference.push().getKey();
-                            mMemberIDList.add(userID);
-                            mMemberIDList.add(friendID);
-                            Members members = new Members(mMemberIDList);
-                            Map<String, Object> memberValues = members.toMap();
+                            mMemberIDList.put(userID, true);
+                            mMemberIDList.put(friendID, true);
 
+                            // members/chat-id/map-of-members
+                            // members
+                            // - 123456
+                            // -- 234567: true
+                            // -- 345678: true
                             Map<String, Object> childUpdates = new HashMap<>();
-                            childUpdates.put(key, memberValues);
+                            childUpdates.put(key, mMemberIDList);
 
                             // Update under members
                             mMembersDatabaseReference.updateChildren(childUpdates);

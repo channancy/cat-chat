@@ -1,7 +1,5 @@
 package channa.com.catchat.models;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -10,28 +8,21 @@ import java.util.Map;
 
 public class Members {
 
-    private List<String> memberIDList;
+    private Map<String, Boolean> memberIDList;
 
     public Members() {
 
     }
 
-    public Members(List<String> memberIDList) {
+    public Members(Map<String, Boolean> memberIDList) {
         this.memberIDList = memberIDList;
     }
 
-    public List<String> getMemberIDList() {
+    public Map<String, Boolean> getMemberIDList() {
         return memberIDList;
     }
 
-    public void setMemberIDList(List<String> memberIDList) {
+    public void setMemberIDList(Map<String, Boolean> memberIDList) {
         this.memberIDList = memberIDList;
-    }
-
-    public Map<String, Object> toMap() {
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("memberIDList", memberIDList);
-
-        return result;
     }
 }
