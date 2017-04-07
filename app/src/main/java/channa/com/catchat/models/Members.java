@@ -28,7 +28,7 @@ public class Members {
         this.memberIDList = memberIDList;
     }
 
-    public Map<String, Object> toMap(String key) {
+    public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("memberIDList", memberIDList);
 
