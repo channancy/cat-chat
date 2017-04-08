@@ -1,6 +1,7 @@
 package channa.com.catchat.fragments;
 
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -20,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import channa.com.catchat.R;
+import channa.com.catchat.activities.ChatActivity;
 
 /**
  * Created by Nancy on 3/30/2017.
@@ -86,6 +88,7 @@ public class FriendDialog extends DialogFragment {
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         Boolean chatExists = false;
+                        String membersKey = null;
 
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot child : dataSnapshot.getChildren()) {
@@ -96,6 +99,7 @@ public class FriendDialog extends DialogFragment {
                                     Log.d(TAG, "existing chat");
 
                                     chatExists = true;
+                                    membersKey = child.getKey();
                                     break;
                                 }
                             }
@@ -105,6 +109,11 @@ public class FriendDialog extends DialogFragment {
                         // Existing chat: user keys exist under members
                         if (chatExists) {
                             // Load messages
+                            Bundle args = new Bundle();
+                            args.putString("chatID", membersKey);
+                            Intent intent = new Intent(getActivity(), ChatActivity.class);
+                            intent.putExtras(args);
+                            startActivity(intent);
                         }
 
                         // New chat: user keys do not exist under members
