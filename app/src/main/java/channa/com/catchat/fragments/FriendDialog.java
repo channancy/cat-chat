@@ -62,7 +62,6 @@ public class FriendDialog extends DialogFragment {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mMembersDatabaseReference = mFirebaseDatabase.getReference().child("members");
         mMessagesDatabaseReference = mFirebaseDatabase.getReference().child("messages");
-
     }
 
     @Nullable
@@ -81,51 +80,37 @@ public class FriendDialog extends DialogFragment {
         Button button = (Button) v.findViewById(R.id.btn_friend_dialog_chat);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Log.d(TAG, "clicked chat");
 
                 mMembersDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Log.d(TAG, "userID: " + userID);
-                        Log.d(TAG, "friendID: " + friendID);
+
+                        Boolean chatExists = false;
 
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot child : dataSnapshot.getChildren()) {
-//                            Log.d(TAG, "child: " + child.getKey());
+                            Log.d(TAG, "child: " + child.getKey());
 
-                                // User keys exist under members
+                                // Check if user keys exist under members
                                 if (child.hasChild(userID) && child.hasChild(friendID)) {
                                     Log.d(TAG, "existing chat");
 
-                                    // Load messages
-                                }
-                                // Users keys do not exist under members
-                                else {
-                                    Log.d(TAG, "new chat");
-
-                                    // Create set of members
-                                    String key = mMembersDatabaseReference.push().getKey();
-                                    mMemberIDList.put(userID, true);
-                                    mMemberIDList.put(friendID, true);
-
-                                    // members/chat-id/map-of-members
-                                    // members
-                                    // - 123456
-                                    // -- 234567: true
-                                    // -- 345678: true
-                                    Map<String, Object> childUpdates = new HashMap<>();
-                                    childUpdates.put(key, mMemberIDList);
-
-                                    // Update under members
-                                    mMembersDatabaseReference.updateChildren(childUpdates);
-
-                                    // Update under messages
-                                    mMessagesDatabaseReference.updateChildren(childUpdates);
+                                    chatExists = true;
+                                    break;
                                 }
                             }
 
                         }
+
+                        // Existing chat: user keys exist under members
+                        if (chatExists) {
+                            // Load messages
+                        }
+
+                        // New chat: user keys do not exist under members
                         else {
+                            Log.d(TAG, "new chat");
+
                             // Create set of members
                             String key = mMembersDatabaseReference.push().getKey();
                             mMemberIDList.put(userID, true);
@@ -141,9 +126,6 @@ public class FriendDialog extends DialogFragment {
 
                             // Update under members
                             mMembersDatabaseReference.updateChildren(childUpdates);
-
-                            // Update under messages
-                            mMessagesDatabaseReference.updateChildren(childUpdates);
                         }
                     }
 
