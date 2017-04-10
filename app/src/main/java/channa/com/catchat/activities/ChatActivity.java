@@ -97,7 +97,9 @@ public class ChatActivity extends AppCompatActivity {
                 // Signed out
                 else {
                     detachDatabaseReadListener();
-                    mMessageAdapter.clear();
+                    if (mMessageList.size() != 0) {
+                        mMessageAdapter.clear();
+                    }
 
                     Log.d(TAG, "onAuthStateChanged: signed out: ");
                 }
@@ -163,7 +165,9 @@ public class ChatActivity extends AppCompatActivity {
         // If signed in, database listener is attached so detach and clear adapter here
         // Also ensures that when activity destroyed (even when nothing to do with sign out like app rotation), still cleanup
         detachDatabaseReadListener();
-        mMessageAdapter.clear();
+        if (mMessageList.size() != 0) {
+            mMessageAdapter.clear();
+        }
     }
 
     @Override
