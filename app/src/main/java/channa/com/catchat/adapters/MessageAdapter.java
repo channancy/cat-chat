@@ -126,4 +126,17 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             friendMessage = (TextView) itemView.findViewById(R.id.tv_friend_message);
         }
     }
+
+    public void setMessageList(List<Message> messages) {
+        mMessages = messages;
+        notifyDataSetChanged();
+    }
+
+    public void clear() {
+        if (mMessages != null) {
+            mMessages.clear();
+        }
+
+        notifyDataSetChanged();
+    }
 }
