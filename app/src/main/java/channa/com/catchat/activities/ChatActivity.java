@@ -151,4 +151,25 @@ public class ChatActivity extends AppCompatActivity {
             mChildEventListener = null;
         }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Detach auth state listener
+        if (mAuthStateListener != null) {
+            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+        }
+
+        // If signed in, database listener is attached so detach and clear adapter here
+        // Also ensures that when activity destroyed (even when nothing to do with sign out like app rotation), still cleanup
+        detachDatabaseReadListener();
+        mMessageAdapter.clear();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Attach auth state listener
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
 }
