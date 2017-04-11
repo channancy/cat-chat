@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,6 +42,12 @@ public class ChatActivity extends AppCompatActivity {
     private MessageAdapter mMessageAdapter;
     @BindView(R.id.rv_message_list)
     RecyclerView rvMessageList;
+    @BindView(R.id.btn_photo_picker)
+    ImageButton btnPhotoPicker;
+    @BindView(R.id.et_message)
+    EditText etMessage;
+    @BindView(R.id.btn_send)
+    ImageButton btnSend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
