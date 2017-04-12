@@ -179,5 +179,8 @@ public class FriendsTab extends Fragment {
         super.onStop();
 
         mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+
+        detachDatabaseReadListener();
+        mFriendListAdapter.clear();
     }
 }
