@@ -85,7 +85,6 @@ public class ChatActivity extends AppCompatActivity {
         // Initialize message recyclerview and its adapter
         mMessageAdapter = new MessageAdapter(ChatActivity.this);
         rvMessageList.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
-        rvMessageList.setAdapter(mMessageAdapter);
 
         final String chatID = getIntent().getExtras().getString("chatID");
         Log.d(TAG, "onCreate: " + chatID);
@@ -176,6 +175,7 @@ public class ChatActivity extends AppCompatActivity {
                     Log.d(TAG, "message text: " + message.getText());
 
                     mMessageAdapter.setMessageList(mMessageList);
+                    rvMessageList.setAdapter(mMessageAdapter);
                 }
 
                 @Override
