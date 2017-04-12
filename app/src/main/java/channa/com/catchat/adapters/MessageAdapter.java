@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import channa.com.catchat.R;
@@ -35,7 +36,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private Context mContext;
     private LayoutInflater mLayoutInflater;
     private String userID;
-    private List<Message> mMessages;
+    private List<Message> mMessages = new ArrayList<>();
 
     public MessageAdapter(Context context) {
         this.mContext = context;

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import channa.com.catchat.R;
@@ -31,7 +32,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
     private Context mContext;
     private LayoutInflater mLayoutInflater;
     private String userID;
-    private List<User> mFriendList;
+    private List<User> mFriendList = new ArrayList<>();
 
     public FriendListAdapter(Context context, String userID) {
         this.mContext = context;
