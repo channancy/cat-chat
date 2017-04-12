@@ -59,6 +59,7 @@ public class ChatActivity extends AppCompatActivity {
     private StorageReference mChatPhotosStorageReference;
 
     private String mUsername;
+    private String mUserID;
     private List<Message> mMessageList = new ArrayList<>();
 
     private MessageAdapter mMessageAdapter;
@@ -81,10 +82,6 @@ public class ChatActivity extends AppCompatActivity {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseStorage = FirebaseStorage.getInstance();
-
-        // Initialize message recyclerview and its adapter
-        mMessageAdapter = new MessageAdapter(ChatActivity.this);
-        rvMessageList.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
 
         final String chatID = getIntent().getExtras().getString("chatID");
         Log.d(TAG, "onCreate: " + chatID);
@@ -125,7 +122,7 @@ public class ChatActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Message message = new Message(null, null, etMessage.getText().toString(), null, null);
+                Message message = new Message(null, mUsername, etMessage.getText().toString(), null, mUserID);
                 mMessagesDatabaseReference.push().setValue(message);
 
                 // Clear input box
@@ -139,8 +136,12 @@ public class ChatActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 // Signed in
                 if (user != null) {
+                    // Initialize message recyclerview and its adapter
+                    mMessageAdapter = new MessageAdapter(ChatActivity.this, user.getUid());
+                    rvMessageList.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
+
                     mMessagesDatabaseReference = mFirebaseDatabase.getReference().child("messages").child(chatID);
-                    onSignedInInitialize(user.getDisplayName());
+                    onSignedInInitialize(user.getDisplayName(), user.getUid());
 
                     Log.d(TAG, "onAuthStateChanged: signed in: " + user.getDisplayName());
                 }
@@ -248,8 +249,9 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    private void onSignedInInitialize(String username) {
+    private void onSignedInInitialize(String username, String userID) {
         mUsername = username;
+        mUserID = userID;
 
         // Attach listener here because database rules say only authenticated users can access
         attachDatabaseReadListener();

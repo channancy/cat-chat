@@ -1,16 +1,12 @@
 package channa.com.catchat.adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,35 +25,15 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public final static int MY_MESSAGE = 0;
     public final static int FRIEND_MESSAGE = 1;
 
-    // Firebase instance variables
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
-
     private Context mContext;
     private LayoutInflater mLayoutInflater;
-    private String userID;
+    private String mUserID;
     private List<Message> mMessages = new ArrayList<>();
 
-    public MessageAdapter(Context context) {
+    public MessageAdapter(Context context, String userID) {
         this.mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
-
-        // Initialize Firebase components
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                // Signed in
-                if (user != null) {
-                    userID = user.getUid();
-                }
-                // Signed out
-                else {
-                    userID = null;
-                }
-            }
-        };
+        this.mUserID = userID;
     }
 
     @Override
@@ -82,7 +58,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Message message = mMessages.get(position);
 
-        if (userID.equals(message.getUserID())) {
+        if (mUserID.equals(message.getUserID())) {
             ((MyMessageHolder) holder).myMessage.setText(message.getText());
         }
         else {
@@ -99,7 +75,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemViewType(int position) {
         Message message = mMessages.get(position);
 
-        if (userID.equals(message.getUserID())) {
+        if (mUserID.equals(message.getUserID())) {
             return MY_MESSAGE;
         }
 
@@ -112,7 +88,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public MyMessageHolder (View itemView) {
             super(itemView);
 
-            myMessage = (TextView) itemView.findViewById(R.id.tv_friend_message);
+            myMessage = (TextView) itemView.findViewById(R.id.tv_my_message);
         }
     }
 
