@@ -133,7 +133,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public void clear() {
-        if (mMessages != null) {
+        if (mMessages.size() > 0) {
             mMessages.clear();
         }
 

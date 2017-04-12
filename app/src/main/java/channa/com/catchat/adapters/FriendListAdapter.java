@@ -85,7 +85,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
     }
 
     public void clear() {
-        if (mFriendList != null) {
+        if (mFriendList.size() > 0) {
             mFriendList.clear();
         }
 
