@@ -5,9 +5,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:layout_gravity="start"
-              android:background="@drawable/bubble_left"
-              android:orientation="horizontal">
+              android:layout_gravity="left"
+              android:background="@drawable/bubble_left">
 
     <ImageView
         android:id="@+id/iv_friend_avatar_message"
