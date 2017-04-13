@@ -3,11 +3,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-    <LinearLayout android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_alignParentRight="true"
-                  android:layout_alignParentEnd="true"
-                  android:background="@drawable/bubble_right">
+    <LinearLayout
+        android:id="@+id/ll_my_message_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/bubble_right">
 
         <TextView
             android:id="@+id/tv_my_message"
@@ -16,5 +18,10 @@
             android:text="Me: Hi, friend!"/>
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_my_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 </RelativeLayout>

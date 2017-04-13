@@ -91,7 +91,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/jpeg");
+                intent.setType("image/*");
                 intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
                 startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
             }
@@ -141,8 +141,9 @@ public class ChatActivity extends AppCompatActivity {
                     mMessageAdapter = new MessageAdapter(ChatActivity.this, user.getUid());
                     rvMessageList.setAdapter(mMessageAdapter);
 
-                    // Get database reference
+                    // Get database references
                     mMessagesDatabaseReference = mFirebaseDatabase.getReference().child("messages").child(chatID);
+                    mChatPhotosStorageReference = mFirebaseStorage.getReference().child("chat_photos");
                     onSignedInInitialize(user.getDisplayName(), user.getUid());
 
                     Log.d(TAG, "onAuthStateChanged: signed in: " + user.getDisplayName());
@@ -245,7 +246,7 @@ public class ChatActivity extends AppCompatActivity {
                     // Get url from taskSnapshot
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                     // Create object
-                    Message message = new Message(null, null, null, downloadUrl.toString(), null);
+                    Message message = new Message(null, mUsername, null, downloadUrl.toString(), mUserID);
                     // Store object in database
                     mMessagesDatabaseReference.push().setValue(message);
                 }

@@ -6,7 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,12 +60,35 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Message message = mMessages.get(position);
+        boolean isPhoto = message.getPhotoUrl() != null;
 
         if (mUserID.equals(message.getUserID())) {
-            ((MyMessageHolder) holder).myMessage.setText(message.getText());
+            if (isPhoto) {
+                ((MyMessageHolder) holder).myMessageContainer.setVisibility(View.GONE);
+                ((MyMessageHolder) holder).myPhoto.setVisibility(View.VISIBLE);
+                Glide.with(((MyMessageHolder) holder).myPhoto.getContext())
+                        .load(message.getPhotoUrl())
+                        .into(((MyMessageHolder) holder).myPhoto);
+            }
+            else {
+                ((MyMessageHolder) holder).myPhoto.setVisibility(View.GONE);
+                ((MyMessageHolder) holder).myMessageContainer.setVisibility(View.VISIBLE);
+                ((MyMessageHolder) holder).myMessage.setText(message.getText());
+            }
         }
         else {
-            ((FriendMessageHolder) holder).friendMessage.setText(message.getText());
+            if (isPhoto) {
+                ((FriendMessageHolder) holder).friendMessageContainer.setVisibility(View.GONE);
+                ((FriendMessageHolder) holder).friendPhoto.setVisibility(View.VISIBLE);
+                Glide.with(((FriendMessageHolder) holder).friendPhoto.getContext())
+                        .load(message.getPhotoUrl())
+                        .into(((FriendMessageHolder) holder).friendPhoto);
+            }
+            else {
+                ((FriendMessageHolder) holder).friendPhoto.setVisibility(View.GONE);
+                ((FriendMessageHolder) holder).friendMessageContainer.setVisibility(View.VISIBLE);
+                ((FriendMessageHolder) holder).friendMessage.setText(message.getText());
+            }
         }
     }
 
@@ -83,24 +109,32 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public class MyMessageHolder extends RecyclerView.ViewHolder {
+        LinearLayout myMessageContainer;
         TextView myMessage;
+        ImageView myPhoto;
 
         public MyMessageHolder (View itemView) {
             super(itemView);
 
+            myMessageContainer = (LinearLayout) itemView.findViewById(R.id.ll_my_message_container);
             myMessage = (TextView) itemView.findViewById(R.id.tv_my_message);
+            myPhoto = (ImageView) itemView.findViewById(R.id.iv_my_photo);
         }
     }
 
     public class FriendMessageHolder extends RecyclerView.ViewHolder {
+        LinearLayout friendMessageContainer;
         ImageView friendAvatar;
         TextView friendMessage;
+        ImageView friendPhoto;
 
         public FriendMessageHolder (View itemView) {
             super(itemView);
 
+            friendMessageContainer = (LinearLayout) itemView.findViewById(R.id.ll_friend_message_container);
             friendAvatar = (ImageView) itemView.findViewById(R.id.iv_friend_avatar_message);
             friendMessage = (TextView) itemView.findViewById(R.id.tv_friend_message);
+            friendPhoto = (ImageView) itemView.findViewById(R.id.iv_friend_photo);
         }
     }
 
