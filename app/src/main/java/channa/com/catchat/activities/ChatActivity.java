@@ -136,10 +136,12 @@ public class ChatActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 // Signed in
                 if (user != null) {
-                    // Initialize message recyclerview and its adapter
-                    mMessageAdapter = new MessageAdapter(ChatActivity.this, user.getUid());
+                    // Set layout manager and adapter
                     rvMessageList.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
+                    mMessageAdapter = new MessageAdapter(ChatActivity.this, user.getUid());
+                    rvMessageList.setAdapter(mMessageAdapter);
 
+                    // Get database reference
                     mMessagesDatabaseReference = mFirebaseDatabase.getReference().child("messages").child(chatID);
                     onSignedInInitialize(user.getDisplayName(), user.getUid());
 
@@ -175,8 +177,10 @@ public class ChatActivity extends AppCompatActivity {
                     mMessageList.add(message);
                     Log.d(TAG, "message text: " + message.getText());
 
+                    // Set data and scroll to last message
                     mMessageAdapter.setMessageList(mMessageList);
-                    rvMessageList.setAdapter(mMessageAdapter);
+                    rvMessageList.scrollToPosition(mMessageAdapter.getItemCount() - 1);
+                    Log.d(TAG, "item count: " + mMessageAdapter.getItemCount());
                 }
 
                 @Override

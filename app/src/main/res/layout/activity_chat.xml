@@ -11,13 +11,15 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="channa.com.catchat.activities.ChatActivity">
 
-    <android.support.v7.widget.RecyclerView android:id="@+id/rv_message_list"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content">
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_message_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/ll_chat_input">
     </android.support.v7.widget.RecyclerView>
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/ll_chat_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
