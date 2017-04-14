@@ -113,6 +113,7 @@ public class FriendDialog extends DialogFragment {
                             args.putString("chatID", membersKey);
                             Intent intent = new Intent(getActivity(), ChatActivity.class);
                             intent.putExtras(args);
+                            dismiss();
                             startActivity(intent);
                         }
 
@@ -135,6 +136,14 @@ public class FriendDialog extends DialogFragment {
 
                             // Update under members
                             mMembersDatabaseReference.updateChildren(childUpdates);
+
+                            // Load messages
+                            Bundle args = new Bundle();
+                            args.putString("chatID", key);
+                            Intent intent = new Intent(getActivity(), ChatActivity.class);
+                            intent.putExtras(args);
+                            dismiss();
+                            startActivity(intent);
                         }
                     }
 
@@ -148,26 +157,4 @@ public class FriendDialog extends DialogFragment {
 
         return v;
     }
-
-    //    @Override
-//    public Dialog onCreateDialog(Bundle savedInstanceState) {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//        String title = getArguments().getString("title");
-//
-//        // Get the layout inflater
-//        LayoutInflater inflater = getActivity().getLayoutInflater();
-//
-//        // Inflate and set the layout for the dialog
-//        // Pass null as the parent view because its going in the dialog layout
-//        builder.setView(inflater.inflate(R.layout.fragment_friend_dialog, null))
-//                .setTitle(title)
-//                // Add action buttons
-//                .setPositiveButton(R.string.chat, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        Log.d(TAG, "clicked chat");
-//                    }
-//                });
-//        return builder.create();
-//    }
 }
