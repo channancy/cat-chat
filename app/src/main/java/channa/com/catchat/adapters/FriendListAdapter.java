@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -19,6 +18,7 @@ import java.util.List;
 import channa.com.catchat.R;
 import channa.com.catchat.fragments.FriendDialog;
 import channa.com.catchat.models.User;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Nancy on 3/28/2017.
@@ -59,13 +59,13 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ImageView friendAvatar;
+        CircleImageView friendAvatar;
         TextView friendName;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            friendAvatar = (ImageView) itemView.findViewById(R.id.iv_friend_avatar);
+            friendAvatar = (CircleImageView) itemView.findViewById(R.id.iv_friend_avatar);
             friendName = (TextView) itemView.findViewById(R.id.tv_friend_name);
 
             itemView.setOnClickListener(this);
