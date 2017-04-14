@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import channa.com.catchat.R;
+import channa.com.catchat.fragments.AccountTab;
 import channa.com.catchat.fragments.ChatsTab;
 import channa.com.catchat.fragments.FriendsTab;
 
@@ -17,10 +18,11 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private final static String TAG = "MyFragmentPagerAdapter";
 
-    private final int mNumOfTabs = 2;
+    private final int mNumOfTabs = 3;
     private Context mContext;
     private FriendsTab mFriendsTab;
     private ChatsTab mChatsTab;
+    private AccountTab mAccountTab;
 
     public MyFragmentPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
@@ -28,6 +30,7 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
         this.mContext = context;
         this.mFriendsTab = new FriendsTab();
         this.mChatsTab = new ChatsTab();
+        this.mAccountTab = new AccountTab();
     }
 
     @Override
@@ -37,6 +40,8 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
                 return this.mFriendsTab;
             case 1:
                 return this.mChatsTab;
+            case 2:
+                return this.mAccountTab;
             default:
                 return null;
         }
@@ -54,6 +59,8 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
                 return mContext.getString(R.string.friends);
             case 1:
                 return mContext.getString(R.string.chats);
+            case 2:
+                return mContext.getString(R.string.account);
             default:
                 return null;
         }

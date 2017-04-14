@@ -7,12 +7,13 @@
     <string name="friends">Friends</string>
     <string name="chat">Chat</string>
     <string name="chats">Chats</string>
+    <string name="account">Account</string>
 
     <string name="add_friend">Add Friend</string>
     <string name="search">Search</string>
     <string name="user_not_found">User not found</string>
     <string name="no_friends_yet">No friends yet</string>
+    <string name="send">send</string>
 
     <string name="sign_out">Sign Out</string>
-    <string name="send">send</string>
 </resources>
