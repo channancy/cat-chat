@@ -61,6 +61,7 @@ public class ChatActivity extends AppCompatActivity {
     private String mUsername;
     private String mUserID;
     private List<Message> mMessageList = new ArrayList<>();
+    private LinearLayoutManager mLinearLayoutManager;
 
     private MessageAdapter mMessageAdapter;
     @BindView(R.id.rv_message_list)
@@ -137,9 +138,33 @@ public class ChatActivity extends AppCompatActivity {
                 // Signed in
                 if (user != null) {
                     // Set layout manager and adapter
-                    rvMessageList.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
+                    mLinearLayoutManager = new LinearLayoutManager(ChatActivity.this);
+                    rvMessageList.setLayoutManager(mLinearLayoutManager);
+
                     mMessageAdapter = new MessageAdapter(ChatActivity.this, user.getUid());
                     rvMessageList.setAdapter(mMessageAdapter);
+
+                    mMessageAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                        @Override
+                        public void onItemRangeInserted(int positionStart, int itemCount) {
+                            super.onItemRangeInserted(positionStart, itemCount);
+
+                            int messageCount = mMessageAdapter.getItemCount();
+                            int lastVisiblePosition =
+                                    mLinearLayoutManager.findLastCompletelyVisibleItemPosition();
+                            Log.d(TAG, "lastVisiblePosition: " + lastVisiblePosition);
+
+                            // If the recycler view is initially being loaded or the
+                            // user is at the bottom of the list, scroll to the bottom
+                            // of the list to show the newly added message.
+                            if (lastVisiblePosition == -1 ||
+                                    (positionStart >= (messageCount - 1) &&
+                                            lastVisiblePosition == (positionStart - 1))) {
+                                rvMessageList.scrollToPosition(positionStart);
+                                Log.d(TAG, "positionStart: " + positionStart);
+                            }
+                        }
+                    });
 
                     // Get database references
                     mMessagesDatabaseReference = mFirebaseDatabase.getReference().child("messages").child(chatID);
@@ -179,9 +204,7 @@ public class ChatActivity extends AppCompatActivity {
                     Log.d(TAG, "message text: " + message.getText());
 
                     // Set data and scroll to last message
-                    mMessageAdapter.setMessageList(mMessageList);
-                    rvMessageList.scrollToPosition(mMessageAdapter.getItemCount() - 1);
-                    Log.d(TAG, "item count: " + mMessageAdapter.getItemCount());
+                    mMessageAdapter.add(mMessageAdapter.getItemCount(), message);
                 }
 
                 @Override

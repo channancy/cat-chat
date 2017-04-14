@@ -138,6 +138,11 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    public void add(int position, Message message) {
+        mMessages.add(position, message);
+        notifyItemInserted(position);
+    }
+
     public void setMessageList(List<Message> messages) {
         mMessages = messages;
         notifyDataSetChanged();

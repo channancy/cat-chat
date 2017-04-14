@@ -16,9 +16,7 @@
         android:id="@+id/rv_message_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/ll_chat_input"
-        app:reverseLayout="true"
-        app:stackFromEnd="true">
+        android:layout_above="@+id/ll_chat_input">
 
     </android.support.v7.widget.RecyclerView>
 
