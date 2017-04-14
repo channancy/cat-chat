@@ -137,13 +137,14 @@ public class ChatActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 // Signed in
                 if (user != null) {
-                    // Set layout manager and adapter
+                    // Get database references
+                    mMessagesDatabaseReference = mFirebaseDatabase.getReference().child("messages").child(chatID);
+                    mChatPhotosStorageReference = mFirebaseStorage.getReference().child("chat_photos");
+                    onSignedInInitialize(user.getDisplayName(), user.getUid());
+
+                    // Initialize layout manager and adapter
                     mLinearLayoutManager = new LinearLayoutManager(ChatActivity.this);
-                    rvMessageList.setLayoutManager(mLinearLayoutManager);
-
                     mMessageAdapter = new MessageAdapter(ChatActivity.this, user.getUid());
-                    rvMessageList.setAdapter(mMessageAdapter);
-
                     mMessageAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
                         @Override
                         public void onItemRangeInserted(int positionStart, int itemCount) {
@@ -166,10 +167,9 @@ public class ChatActivity extends AppCompatActivity {
                         }
                     });
 
-                    // Get database references
-                    mMessagesDatabaseReference = mFirebaseDatabase.getReference().child("messages").child(chatID);
-                    mChatPhotosStorageReference = mFirebaseStorage.getReference().child("chat_photos");
-                    onSignedInInitialize(user.getDisplayName(), user.getUid());
+                    // Set layout manager and adapter
+                    rvMessageList.setLayoutManager(mLinearLayoutManager);
+                    rvMessageList.setAdapter(mMessageAdapter);
 
                     Log.d(TAG, "onAuthStateChanged: signed in: " + user.getDisplayName());
                 }
@@ -203,7 +203,7 @@ public class ChatActivity extends AppCompatActivity {
                     mMessageList.add(message);
                     Log.d(TAG, "message text: " + message.getText());
 
-                    // Set data and scroll to last message
+                    // Add data
                     mMessageAdapter.add(mMessageAdapter.getItemCount(), message);
                 }
 
@@ -278,6 +278,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void onSignedInInitialize(String username, String userID) {
+        // Set
         mUsername = username;
         mUserID = userID;
 
@@ -286,8 +287,9 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void onSignedOutCleanup() {
-        // Unset username
+        // Unset
         mUsername = null;
+        mUserID = null;
 
         // If do not clear, see messages even though not signed in,
         // also a bug in which see duplicate messages when signing in/out
