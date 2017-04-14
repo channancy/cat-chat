@@ -16,6 +16,7 @@ import java.util.List;
 
 import channa.com.catchat.R;
 import channa.com.catchat.models.Message;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Nancy on 4/4/2017.
@@ -124,7 +125,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public class FriendMessageHolder extends RecyclerView.ViewHolder {
         LinearLayout friendMessageContainer;
-        ImageView friendAvatar;
+        CircleImageView friendAvatar;
         TextView friendMessage;
         ImageView friendPhoto;
 
@@ -132,7 +133,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             super(itemView);
 
             friendMessageContainer = (LinearLayout) itemView.findViewById(R.id.ll_friend_message_container);
-            friendAvatar = (ImageView) itemView.findViewById(R.id.iv_friend_avatar_message);
+            friendAvatar = (CircleImageView) itemView.findViewById(R.id.iv_friend_avatar_message);
             friendMessage = (TextView) itemView.findViewById(R.id.tv_friend_message);
             friendPhoto = (ImageView) itemView.findViewById(R.id.iv_friend_photo);
         }

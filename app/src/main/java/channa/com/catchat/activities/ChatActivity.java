@@ -144,6 +144,9 @@ public class ChatActivity extends AppCompatActivity {
 
                     // Initialize layout manager and adapter
                     mLinearLayoutManager = new LinearLayoutManager(ChatActivity.this);
+                    // List fills its content starting from the bottom of the view
+                    mLinearLayoutManager.setStackFromEnd(true);
+
                     mMessageAdapter = new MessageAdapter(ChatActivity.this, user.getUid());
                     mMessageAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
                         @Override
