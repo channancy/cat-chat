@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +24,13 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import channa.com.catchat.R;
+import channa.com.catchat.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
@@ -45,7 +50,9 @@ public class AccountTab extends Fragment {
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mAvatarPhotosStorageReference;
 
+    private User mUser;
     private String mUserID;
+    private String mAvatarUrl;
 
     @BindView(R.id.iv_account_avatar)
     CircleImageView ivAccountAvatar;
@@ -64,21 +71,6 @@ public class AccountTab extends Fragment {
         mUsersDatabaseReference = mFirebaseDatabase.getReference().child("users");
         mFirebaseStorage = FirebaseStorage.getInstance();
         mAvatarPhotosStorageReference = mFirebaseStorage.getReference().child("avatar_photos");
-
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                // Signed in
-                if (user != null) {
-                    mUserID = user.getUid();
-                }
-                // Signed out
-                else {
-
-                }
-            }
-        };
     }
 
     @Override
@@ -88,7 +80,47 @@ public class AccountTab extends Fragment {
         View layout = inflater.inflate(R.layout.fragment_account_tab, container, false);
         ButterKnife.bind(this, layout);
 
-        Glide.with(this).load("http://goo.gl/gEgYUd").into(ivAccountAvatar);
+        Log.d(TAG, "onCreateView: " + mUserID);
+
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                // Signed in
+                if (user != null) {
+                    mUserID = user.getUid();
+
+                    // Retrieve user
+                    mUsersDatabaseReference.orderByChild("id").equalTo(mUserID).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            DataSnapshot userFound = dataSnapshot.getChildren().iterator().next();
+                            mUser = userFound.getValue(User.class);
+                            mAvatarUrl = mUser.getAvatarUrl();
+
+                            // Load avatar if exists
+                            if (mAvatarUrl != null) {
+                                Glide.with(AccountTab.this).load(mAvatarUrl).into(ivAccountAvatar);
+
+                            }
+                            // Otherwise load default avatar
+                            else {
+                                Glide.with(AccountTab.this).load("http://goo.gl/gEgYUd").into(ivAccountAvatar);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+                // Signed out
+                else {
+
+                }
+            }
+        };
 
         ivAccountAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,22 +152,33 @@ public class AccountTab extends Fragment {
             photoRef.putFile(selectedImageUri).addOnSuccessListener(getActivity(), new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Log.d(TAG, "onSuccess: " + mUserID);
+
                     // Get url from taskSnapshot
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
-                    mUsersDatabaseReference.orderByChild("id").equalTo(mUserID).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.d(TAG, "onSuccess: " + downloadUrl);
 
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
+                    // Save url to user
+                    Map<String, Object> childUpdates = new HashMap<String, Object>();
+                    childUpdates.put("avatarUrl", downloadUrl.toString());
+                    mUsersDatabaseReference.child(mUserID).updateChildren(childUpdates);
                 }
             });
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
     }
 }
