@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +53,12 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         User friend = mFriendList.get(position);
         holder.friendName.setText(friend.getName());
+        if (friend.getAvatarUrl() != null) {
+            Glide.with(mContext).load(friend.getAvatarUrl()).into(holder.friendAvatar);
+        }
+        else {
+            Glide.with(mContext).load("http://goo.gl/gEgYUd").into(holder.friendAvatar);
+        }
     }
 
     @Override
