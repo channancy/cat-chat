@@ -39,6 +39,7 @@ public class AddFriendActivity extends AppCompatActivity {
 
     private User mFriend;
     private String mFriendID;
+    private Map<String, Boolean> mFriendIDList = new HashMap<>();
 
     @BindView(R.id.et_friend_search) EditText etFriendSearch;
     @BindView(R.id.btn_friend_search_submit) Button btnFriendSearchSubmit;
@@ -93,12 +94,10 @@ public class AddFriendActivity extends AppCompatActivity {
             public void onClick(View view) {
                 DatabaseReference mContactsDatabaseReference = mFirebaseDatabase.getReference().child("contacts");
 
-                User newFriend = new User(mFriend.getId(), mFriend.getName(), mFriend.getEmail(), null);
-                Map<String, Object> friendValues = newFriend.toMap();
+                mFriendIDList.put(mFriendID, true);
 
                 Map<String, Object> childUpdates = new HashMap<>();
-                // Save friend to /contacts/user-id/friend-user-id
-                childUpdates.put("/" + user.getUid() + "/" + mFriendID, friendValues);
+                childUpdates.put(user.getUid(), mFriendIDList);
 
                 mContactsDatabaseReference.updateChildren(childUpdates);
             }
