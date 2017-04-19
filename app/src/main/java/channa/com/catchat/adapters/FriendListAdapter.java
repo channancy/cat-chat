@@ -53,6 +53,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         User friend = mFriendList.get(position);
         holder.friendName.setText(friend.getName());
+
         if (friend.getAvatarUrl() != null) {
             Glide.with(mContext).load(friend.getAvatarUrl()).into(holder.friendAvatar);
         }
@@ -88,9 +89,9 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         }
     }
 
-    public void setFriendList(List<User> friendList) {
-        mFriendList = friendList;
-        notifyDataSetChanged();
+    public void add(int position, User friend) {
+        mFriendList.add(position, friend);
+        notifyItemInserted(position);
     }
 
     public void clear() {

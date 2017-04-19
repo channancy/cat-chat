@@ -42,6 +42,7 @@ public class FriendsTab extends Fragment {
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mContactsDatabaseReference;
+    private DatabaseReference mUsersDatabaseReference;
     private ChildEventListener mChildEventListener;
 
     private List<User> mFriendList = new ArrayList<>();
@@ -81,9 +82,10 @@ public class FriendsTab extends Fragment {
                             if (dataSnapshot.hasChildren()) {
                                 tvFriendListEmpty.setVisibility(View.GONE);
 
-                                // Initialize adapter and set layout manager
+                                // Set adapter and layout manager
                                 mFriendListAdapter = new FriendListAdapter(getActivity(), userID);
                                 rvFriendList.setLayoutManager(new LinearLayoutManager(getActivity()));
+                                rvFriendList.setAdapter(mFriendListAdapter);
 
                                 // Populate RecyclerView
                                 attachDatabaseReadListener();
@@ -124,14 +126,24 @@ public class FriendsTab extends Fragment {
             mChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    // Deserialize from database to object
-                    User friend = dataSnapshot.getValue(User.class);
-                    mFriendList.add(friend);
-                    Log.d(TAG, "friend name: " + friend.getName());
+                    mUsersDatabaseReference = mFirebaseDatabase.getReference().child("users").child(dataSnapshot.getKey());
+                    mUsersDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            // Deserialize from database to object
+                            User friend = dataSnapshot.getValue(User.class);
+                            mFriendList.add(friend);
+                            Log.d(TAG, "friend name: " + friend.getName());
 
-                    // Set data and adapter
-                    mFriendListAdapter.setFriendList(mFriendList);
-                    rvFriendList.setAdapter(mFriendListAdapter);
+                            // Add data
+                            mFriendListAdapter.add(mFriendListAdapter.getItemCount(), friend);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
 
                 @Override
@@ -156,7 +168,7 @@ public class FriendsTab extends Fragment {
             };
 
             // Order by friend name
-            mContactsDatabaseReference.orderByChild("name").addChildEventListener(mChildEventListener);
+            mContactsDatabaseReference.addChildEventListener(mChildEventListener);
         }
     }
 
