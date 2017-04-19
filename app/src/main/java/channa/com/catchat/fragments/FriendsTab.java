@@ -136,7 +136,7 @@ public class FriendsTab extends Fragment {
                             Log.d(TAG, "friend name: " + friend.getName());
 
                             // Add data
-                            mFriendListAdapter.add(mFriendListAdapter.getItemCount(), friend);
+                            mFriendListAdapter.add(friend);
                         }
 
                         @Override

@@ -7,7 +7,7 @@ import java.util.Map;
  * Created by Nancy on 1/22/2017.
  */
 
-public class User {
+public class User implements Comparable<User> {
     private String id;
     private String name;
     private String email;
@@ -64,5 +64,10 @@ public class User {
         result.put("avatarUrl", avatarUrl);
 
         return result;
+    }
+
+    @Override
+    public int compareTo(User user) {
+        return name.compareTo(user.name);
     }
 }

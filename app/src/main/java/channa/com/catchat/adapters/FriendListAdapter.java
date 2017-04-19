@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import channa.com.catchat.R;
@@ -89,9 +90,10 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         }
     }
 
-    public void add(int position, User friend) {
-        mFriendList.add(position, friend);
-        notifyItemInserted(position);
+    public void add(User friend) {
+        mFriendList.add(friend);
+        Collections.sort(mFriendList);
+        notifyDataSetChanged();
     }
 
     public void clear() {
