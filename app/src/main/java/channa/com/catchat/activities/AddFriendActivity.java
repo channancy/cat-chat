@@ -40,10 +40,14 @@ public class AddFriendActivity extends AppCompatActivity {
     private User mFriend;
     private String mFriendID;
 
-    @BindView(R.id.et_friend_search) EditText etFriendSearch;
-    @BindView(R.id.btn_friend_search_submit) Button btnFriendSearchSubmit;
-    @BindView(R.id.btn_add_friend) Button btnAddFriend;
-    @BindView(R.id.tv_friend_search_result) TextView tvFriendSearchResult;
+    @BindView(R.id.et_friend_search)
+    EditText etFriendSearch;
+    @BindView(R.id.btn_friend_search_submit)
+    Button btnFriendSearchSubmit;
+    @BindView(R.id.btn_add_friend)
+    Button btnAddFriend;
+    @BindView(R.id.tv_friend_search_result)
+    TextView tvFriendSearchResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,15 +100,28 @@ public class AddFriendActivity extends AppCompatActivity {
                 mContactsDatabaseReference.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        // Get friend list
-                        Map<String, Boolean> friendList = (Map<String, Boolean>) dataSnapshot.getValue();
-                        // Add friend
-                        friendList.put(mFriendID, true);
+                        // Friend list has contacts
+                        if (dataSnapshot.exists()) {
+                            // Get friend list
+                            Map<String, Boolean> friendList = (Map<String, Boolean>) dataSnapshot.getValue();
+                            // Add friend
+                            friendList.put(mFriendID, true);
 
-                        // Update database
-                        Map<String, Object> childUpdates = new HashMap<>();
-                        childUpdates.put(user.getUid(), friendList);
-                        mContactsDatabaseReference.updateChildren(childUpdates);
+                            // Update database
+                            Map<String, Object> childUpdates = new HashMap<>();
+                            childUpdates.put(user.getUid(), friendList);
+                            mContactsDatabaseReference.updateChildren(childUpdates);
+                        }
+                        // Empty friend list
+                        else {
+                            // Create friend list
+                            Map<String, Boolean> friendList = new HashMap<String, Boolean>();
+                            // Add friend
+                            friendList.put(mFriendID, true);
+
+                            // Save to database
+                            mContactsDatabaseReference.child(user.getUid()).setValue(friendList);
+                        }
                     }
 
                     @Override
