@@ -39,7 +39,6 @@ public class AddFriendActivity extends AppCompatActivity {
 
     private User mFriend;
     private String mFriendID;
-    private Map<String, Boolean> mFriendIDList = new HashMap<>();
 
     @BindView(R.id.et_friend_search) EditText etFriendSearch;
     @BindView(R.id.btn_friend_search_submit) Button btnFriendSearchSubmit;
@@ -92,14 +91,27 @@ public class AddFriendActivity extends AppCompatActivity {
         btnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatabaseReference mContactsDatabaseReference = mFirebaseDatabase.getReference().child("contacts");
+                final DatabaseReference mContactsDatabaseReference = mFirebaseDatabase.getReference().child("contacts");
 
-                mFriendIDList.put(mFriendID, true);
+                mContactsDatabaseReference.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // Get friend list
+                        Map<String, Boolean> friendList = (Map<String, Boolean>) dataSnapshot.getValue();
+                        // Add friend
+                        friendList.put(mFriendID, true);
 
-                Map<String, Object> childUpdates = new HashMap<>();
-                childUpdates.put(user.getUid(), mFriendIDList);
+                        // Update database
+                        Map<String, Object> childUpdates = new HashMap<>();
+                        childUpdates.put(user.getUid(), friendList);
+                        mContactsDatabaseReference.updateChildren(childUpdates);
+                    }
 
-                mContactsDatabaseReference.updateChildren(childUpdates);
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
     }
