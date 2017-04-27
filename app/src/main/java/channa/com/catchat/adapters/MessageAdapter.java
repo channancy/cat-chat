@@ -37,11 +37,17 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private LayoutInflater mLayoutInflater;
     private String mUserID;
     private List<Message> mMessages = new ArrayList<>();
+    private SimpleDateFormat mSimpleDateFormat;
+    private TimeZone mTimeZone;
 
     public MessageAdapter(Context context, String userID) {
-        this.mContext = context;
+        mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
-        this.mUserID = userID;
+        mUserID = userID;
+
+        mSimpleDateFormat = new SimpleDateFormat("h:mm a", Locale.getDefault());
+        mTimeZone = TimeZone.getDefault();
+        mSimpleDateFormat.setTimeZone(this.mTimeZone);
     }
 
     @Override
@@ -82,16 +88,11 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
 
             Date date = new Date(message.getDateCreatedLong());
-            SimpleDateFormat sdf = new SimpleDateFormat("h:mm a", Locale.getDefault());
-            TimeZone timeZone = TimeZone.getDefault();
-            sdf.setTimeZone(timeZone);
-
-//            Log.d(TAG, "dateCreatedLong: " + message.getDateCreatedLong());
-//            Log.d(TAG, "Locale.getDefault() " + Locale.getDefault());
-//            Log.d(TAG, "timeZone: " + timeZone);
-
-            String formattedDate = sdf.format(date);
+            String formattedDate = mSimpleDateFormat.format(date);
             ((MyMessageHolder) holder).myMessageTimestamp.setText(formattedDate);
+
+//            Log.d(TAG, "Locale.getDefault() " + Locale.getDefault());
+//            Log.d(TAG, "mTimeZone: " + mTimeZone);
         }
         else {
             if (isPhoto) {
