@@ -1,7 +1,13 @@
 package channa.com.catchat.models;
 
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.ServerValue;
+
+import java.util.HashMap;
+
 /**
  * Created by Nancy on 4/4/2017.
+ * http://stackoverflow.com/questions/36658833/firebase-servervalue-timestamp-in-java-data-models-objects
  */
 
 public class Message {
@@ -11,6 +17,7 @@ public class Message {
     private String text;
     private String photoUrl;
     private String userID;
+    private HashMap<String, Object> timestampCreated;
 
     public Message() {
 
@@ -22,6 +29,8 @@ public class Message {
         this.text = text;
         this.photoUrl = photoUrl;
         this.userID = userID;
+        HashMap<String, Object> timestampNow = new HashMap<>();
+        timestampNow.put("timestamp", ServerValue.TIMESTAMP);
     }
 
     public String getAvatarUrl() {
@@ -63,5 +72,18 @@ public class Message {
 
     public void setUserID(String userID) {
         this.userID = userID;
+    }
+
+    public HashMap<String, Object> getTimestampCreated(){
+        return timestampCreated;
+    }
+
+    @Exclude
+    public long getTimestampCreatedLong(){
+        return (long) timestampCreated.get("timestamp");
+    }
+
+    public void setTimestampCreated(HashMap<String, Object> timestampCreated) {
+        this.timestampCreated = timestampCreated;
     }
 }
