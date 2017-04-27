@@ -108,7 +108,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 ((FriendMessageHolder) holder).friendMessage.setText(message.getText());
             }
 
-            ((FriendMessageHolder) holder).friendMessageTimestamp.setText(String.valueOf(message.getDateCreatedLong()));
+            Date date = new Date(message.getDateCreatedLong());
+            String formattedDate = mSimpleDateFormat.format(date);
+            ((FriendMessageHolder) holder).friendMessageTimestamp.setText(formattedDate);
         }
     }
 
