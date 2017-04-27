@@ -123,7 +123,7 @@ public class ChatActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Message message = new Message(null, mUsername, etMessage.getText().toString(), null, mUserID);
+                Message message = new Message(null, mUsername, etMessage.getText().toString(), null, mUserID, null);
                 mMessagesDatabaseReference.push().setValue(message);
 
                 // Clear input box
@@ -272,7 +272,7 @@ public class ChatActivity extends AppCompatActivity {
                     // Get url from taskSnapshot
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                     // Create object
-                    Message message = new Message(null, mUsername, null, downloadUrl.toString(), mUserID);
+                    Message message = new Message(null, mUsername, null, downloadUrl.toString(), mUserID, null);
                     // Store object in database
                     mMessagesDatabaseReference.push().setValue(message);
                 }

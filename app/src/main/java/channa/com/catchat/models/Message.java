@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 /**
  * Created by Nancy on 4/4/2017.
- * http://stackoverflow.com/questions/36658833/firebase-servervalue-timestamp-in-java-data-models-objects
+ * http://stackoverflow.com/questions/33096128/when-making-a-pojo-in-firebase-can-you-use-servervalue-timestamp?lq=1
  */
 
 public class Message {
@@ -17,20 +17,25 @@ public class Message {
     private String text;
     private String photoUrl;
     private String userID;
-    private HashMap<String, Object> timestampCreated;
+    private HashMap<String, Object> dateCreated;
+    private HashMap<String, Object> dateLastChanged;
 
     public Message() {
 
     }
 
-    public Message(String avatarUrl, String name, String text, String photoUrl, String userID) {
+    public Message(String avatarUrl, String name, String text, String photoUrl, String userID, HashMap<String,Object> dateCreated) {
         this.avatarUrl = avatarUrl;
         this.name = name;
         this.text = text;
         this.photoUrl = photoUrl;
         this.userID = userID;
-        HashMap<String, Object> timestampNow = new HashMap<>();
-        timestampNow.put("timestamp", ServerValue.TIMESTAMP);
+        this.dateCreated = dateCreated;
+
+        // Date last changed will always be set to ServerValue.TIMESTAMP
+        HashMap<String, Object> dateLastChangedObj = new HashMap<String, Object>();
+        dateLastChangedObj.put("date", ServerValue.TIMESTAMP);
+        this.dateLastChanged = dateLastChangedObj;
     }
 
     public String getAvatarUrl() {
@@ -74,16 +79,31 @@ public class Message {
         this.userID = userID;
     }
 
-    public HashMap<String, Object> getTimestampCreated(){
-        return timestampCreated;
+    public HashMap<String, Object> getDateLastChanged() {
+        return dateLastChanged;
+    }
+
+    public HashMap<String, Object> getDateCreated() {
+        // If there is a dateCreated object already, then return that
+        if (dateCreated != null) {
+            return dateCreated;
+        }
+        // Otherwise make a new object set to ServerValue.TIMESTAMP
+        HashMap<String, Object> dateCreatedObj = new HashMap<String, Object>();
+        dateCreatedObj.put("date", ServerValue.TIMESTAMP);
+        return dateCreatedObj;
+    }
+
+    // Use the method described in http://stackoverflow.com/questions/25500138/android-chat-crashes-on-datasnapshot-getvalue-for-timestamp/25512747#25512747
+    // to get the long values from the date object.
+    @Exclude
+    public long getDateLastChangedLong() {
+
+        return (long)dateLastChanged.get("date");
     }
 
     @Exclude
-    public long getTimestampCreatedLong(){
-        return (long) timestampCreated.get("timestamp");
-    }
-
-    public void setTimestampCreated(HashMap<String, Object> timestampCreated) {
-        this.timestampCreated = timestampCreated;
+    public long getDateCreatedLong() {
+        return (long)dateCreated.get("date");
     }
 }
