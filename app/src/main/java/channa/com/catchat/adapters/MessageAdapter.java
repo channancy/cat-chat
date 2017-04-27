@@ -11,8 +11,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import channa.com.catchat.R;
 import channa.com.catchat.models.Message;
@@ -76,6 +80,18 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 ((MyMessageHolder) holder).myMessageContainer.setVisibility(View.VISIBLE);
                 ((MyMessageHolder) holder).myMessage.setText(message.getText());
             }
+
+            Date date = new Date(message.getDateCreatedLong());
+            SimpleDateFormat sdf = new SimpleDateFormat("h:mm a", Locale.getDefault());
+            TimeZone timeZone = TimeZone.getDefault();
+            sdf.setTimeZone(timeZone);
+
+//            Log.d(TAG, "dateCreatedLong: " + message.getDateCreatedLong());
+//            Log.d(TAG, "Locale.getDefault() " + Locale.getDefault());
+//            Log.d(TAG, "timeZone: " + timeZone);
+
+            String formattedDate = sdf.format(date);
+            ((MyMessageHolder) holder).myMessageTimestamp.setText(formattedDate);
         }
         else {
             if (isPhoto) {
@@ -90,6 +106,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 ((FriendMessageHolder) holder).friendMessageContainer.setVisibility(View.VISIBLE);
                 ((FriendMessageHolder) holder).friendMessage.setText(message.getText());
             }
+
+            ((FriendMessageHolder) holder).friendMessageTimestamp.setText(String.valueOf(message.getDateCreatedLong()));
         }
     }
 
@@ -113,6 +131,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         LinearLayout myMessageContainer;
         TextView myMessage;
         ImageView myPhoto;
+        TextView myMessageTimestamp;
 
         public MyMessageHolder (View itemView) {
             super(itemView);
@@ -120,6 +139,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             myMessageContainer = (LinearLayout) itemView.findViewById(R.id.ll_my_message_container);
             myMessage = (TextView) itemView.findViewById(R.id.tv_my_message);
             myPhoto = (ImageView) itemView.findViewById(R.id.iv_my_photo);
+            myMessageTimestamp = (TextView) itemView.findViewById(R.id.tv_my_message_timestamp);
         }
     }
 
@@ -128,6 +148,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         CircleImageView friendAvatar;
         TextView friendMessage;
         ImageView friendPhoto;
+        TextView friendMessageTimestamp;
 
         public FriendMessageHolder (View itemView) {
             super(itemView);
@@ -136,6 +157,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             friendAvatar = (CircleImageView) itemView.findViewById(R.id.iv_friend_avatar_message);
             friendMessage = (TextView) itemView.findViewById(R.id.tv_friend_message);
             friendPhoto = (ImageView) itemView.findViewById(R.id.iv_friend_photo);
+            friendMessageTimestamp = (TextView) itemView.findViewById(R.id.tv_friend_message_timestamp);
         }
     }
 
