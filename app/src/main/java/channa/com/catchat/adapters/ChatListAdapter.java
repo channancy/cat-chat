@@ -9,8 +9,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import channa.com.catchat.R;
 import channa.com.catchat.models.Chat;
@@ -27,10 +31,16 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     private Context mContext;
     private LayoutInflater mLayoutInflater;
     private List<Chat> mChatList = new ArrayList<>();
+    private SimpleDateFormat mSimpleDateFormat;
+    private TimeZone mTimeZone;
 
     public ChatListAdapter(Context context) {
         this.mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
+
+        mSimpleDateFormat = new SimpleDateFormat("h:mm a", Locale.getDefault());
+        mTimeZone = TimeZone.getDefault();
+        mSimpleDateFormat.setTimeZone(this.mTimeZone);
     }
 
     @Override
@@ -45,7 +55,10 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         Chat chat = mChatList.get(position);
         holder.title.setText(chat.getTitle());
         holder.lastMessage.setText(chat.getLastMessage());
-        holder.lastTimestamp.setText(chat.getLastTimestamp());
+
+        Date date = new Date(chat.getDateCreatedLong());
+        String formattedDate = mSimpleDateFormat.format(date);
+        holder.lastTimestamp.setText(formattedDate);
 
         if (chat.getAvatarUrl() != null) {
             Glide.with(mContext).load(chat.getAvatarUrl()).into(holder.avatarUrl);

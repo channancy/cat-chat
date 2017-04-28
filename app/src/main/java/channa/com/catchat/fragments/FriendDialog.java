@@ -71,8 +71,8 @@ public class FriendDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final String userID = getArguments().getString("userID");
         final String friendID = getArguments().getString("friendID");
-        String friendName = getArguments().getString("friendName");
-        String friendAvatar = getArguments().getString("friendAvatar");
+        final String friendName = getArguments().getString("friendName");
+        final String friendAvatar = getArguments().getString("friendAvatar");
 
         View v = inflater.inflate(R.layout.fragment_friend_dialog, container, false);
         TextView tvTitle = (TextView) v.findViewById(R.id.tv_friend_dialog_title);
@@ -111,6 +111,8 @@ public class FriendDialog extends DialogFragment {
                             // Load messages
                             Bundle args = new Bundle();
                             args.putString("chatID", membersKey);
+                            args.putString("avatarUrl", friendAvatar);
+                            args.putString("friendName", friendName);
                             Intent intent = new Intent(getActivity(), ChatActivity.class);
                             intent.putExtras(args);
                             dismiss();

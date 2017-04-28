@@ -1,5 +1,10 @@
 package channa.com.catchat.models;
 
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.ServerValue;
+
+import java.util.HashMap;
+
 /**
  * Created by Nancy on 4/26/2017.
  */
@@ -9,17 +14,23 @@ public class Chat {
     private String avatarUrl;
     private String title;
     private String lastMessage;
-    private String lastTimestamp;
+    private HashMap<String, Object> dateCreated;
+    private HashMap<String, Object> dateLastChanged;
 
     public Chat() {
 
     }
 
-    public Chat(String avatarUrl, String title, String lastMessage, String lastTimestamp) {
+    public Chat(String avatarUrl, String title, String lastMessage, HashMap<String,Object> dateCreated) {
         this.avatarUrl = avatarUrl;
         this.title = title;
         this.lastMessage = lastMessage;
-        this.lastTimestamp = lastTimestamp;
+        this.dateCreated = dateCreated;
+
+        // Date last changed will always be set to ServerValue.TIMESTAMP
+        HashMap<String, Object> dateLastChangedObj = new HashMap<String, Object>();
+        dateLastChangedObj.put("date", ServerValue.TIMESTAMP);
+        this.dateLastChanged = dateLastChangedObj;
     }
 
 
@@ -47,11 +58,27 @@ public class Chat {
         this.lastMessage = lastMessage;
     }
 
-    public String getLastTimestamp() {
-        return lastTimestamp;
+    public HashMap<String, Object> getDateCreated() {
+        // If there is a dateCreated object already, then return that
+        if (dateCreated != null) {
+            return dateCreated;
+        }
+        // Otherwise make a new object set to ServerValue.TIMESTAMP
+        HashMap<String, Object> dateCreatedObj = new HashMap<String, Object>();
+        dateCreatedObj.put("date", ServerValue.TIMESTAMP);
+        return dateCreatedObj;
     }
 
-    public void setLastTimestamp(String lastTimestamp) {
-        this.lastTimestamp = lastTimestamp;
+    // Use the method described in http://stackoverflow.com/questions/25500138/android-chat-crashes-on-datasnapshot-getvalue-for-timestamp/25512747#25512747
+    // to get the long values from the date object.
+    @Exclude
+    public long getDateLastChangedLong() {
+
+        return (long)dateLastChanged.get("date");
+    }
+
+    @Exclude
+    public long getDateCreatedLong() {
+        return (long)dateCreated.get("date");
     }
 }

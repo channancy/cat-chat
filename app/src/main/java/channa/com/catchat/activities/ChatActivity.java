@@ -37,6 +37,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import channa.com.catchat.R;
 import channa.com.catchat.adapters.MessageAdapter;
+import channa.com.catchat.models.Chat;
 import channa.com.catchat.models.Message;
 
 public class ChatActivity extends AppCompatActivity {
@@ -54,6 +55,7 @@ public class ChatActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mMessagesDatabaseReference;
+    private DatabaseReference mChatsDatabaseReference;
     private ChildEventListener mChildEventListener;
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mChatPhotosStorageReference;
@@ -85,6 +87,8 @@ public class ChatActivity extends AppCompatActivity {
         mFirebaseStorage = FirebaseStorage.getInstance();
 
         final String chatID = getIntent().getExtras().getString("chatID");
+        final String avatarUrl = getIntent().getExtras().getString("avatarUrl");
+        final String friendName = getIntent().getExtras().getString("friendName");
         Log.d(TAG, "onCreate: " + chatID);
 
         // ImagePickerButton shows an image picker to upload a image for a message
@@ -123,8 +127,10 @@ public class ChatActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Message message = new Message(null, mUsername, etMessage.getText().toString(), null, mUserID, null);
+                Message message = new Message(avatarUrl, mUsername, etMessage.getText().toString(), null, mUserID, null);
                 mMessagesDatabaseReference.push().setValue(message);
+                Chat chat = new Chat(avatarUrl, friendName, etMessage.getText().toString(), null);
+                mChatsDatabaseReference.setValue(chat);
 
                 // Clear input box
                 etMessage.setText("");
@@ -139,6 +145,7 @@ public class ChatActivity extends AppCompatActivity {
                 if (user != null) {
                     // Get database references
                     mMessagesDatabaseReference = mFirebaseDatabase.getReference().child("messages").child(chatID);
+                    mChatsDatabaseReference = mFirebaseDatabase.getReference().child("chats").child(chatID);
                     mChatPhotosStorageReference = mFirebaseStorage.getReference().child("chat_photos");
                     onSignedInInitialize(user.getDisplayName(), user.getUid());
 
