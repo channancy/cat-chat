@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--http://stackoverflow.com/questions/32032468/how-to-use-wrap-content-with-a-maximum-width-->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -9,12 +12,16 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:background="@drawable/bubble_right">
+        android:paddingEnd="0dp"
+        android:paddingLeft="100dp"
+        android:paddingRight="0dp"
+        android:paddingStart="100dp">
 
         <TextView
             android:id="@+id/tv_my_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/bubble_right"
             android:text="Me: Hi, friend!"/>
 
     </LinearLayout>
@@ -32,6 +39,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/ll_my_message_container"
+        android:layout_marginEnd="-100dp"
+        android:layout_marginRight="-100dp"
         android:layout_toLeftOf="@+id/ll_my_message_container"
         android:layout_toStartOf="@+id/ll_my_message_container"
         android:text="5:00 PM"/>
