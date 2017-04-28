@@ -75,7 +75,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         if (mUserID.equals(message.getUserID())) {
             if (isPhoto) {
-                ((MyMessageHolder) holder).myMessageContainer.setVisibility(View.GONE);
+                ((MyMessageHolder) holder).myMessage.setVisibility(View.GONE);
                 ((MyMessageHolder) holder).myPhoto.setVisibility(View.VISIBLE);
                 Glide.with(((MyMessageHolder) holder).myPhoto.getContext())
                         .load(message.getPhotoUrl())
@@ -83,7 +83,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
             else {
                 ((MyMessageHolder) holder).myPhoto.setVisibility(View.GONE);
-                ((MyMessageHolder) holder).myMessageContainer.setVisibility(View.VISIBLE);
+                ((MyMessageHolder) holder).myMessage.setVisibility(View.VISIBLE);
                 ((MyMessageHolder) holder).myMessage.setText(message.getText());
             }
 
@@ -96,7 +96,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
         else {
             if (isPhoto) {
-                ((FriendMessageHolder) holder).friendMessageContainer.setVisibility(View.GONE);
+                ((FriendMessageHolder) holder).friendMessage.setVisibility(View.GONE);
                 ((FriendMessageHolder) holder).friendPhoto.setVisibility(View.VISIBLE);
                 Glide.with(((FriendMessageHolder) holder).friendPhoto.getContext())
                         .load(message.getPhotoUrl())
@@ -104,7 +104,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
             else {
                 ((FriendMessageHolder) holder).friendPhoto.setVisibility(View.GONE);
-                ((FriendMessageHolder) holder).friendMessageContainer.setVisibility(View.VISIBLE);
+                ((FriendMessageHolder) holder).friendMessage.setVisibility(View.VISIBLE);
                 ((FriendMessageHolder) holder).friendMessage.setText(message.getText());
             }
 

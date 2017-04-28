@@ -1,6 +1,7 @@
 package channa.com.catchat.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -27,6 +28,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import channa.com.catchat.R;
+import channa.com.catchat.activities.MainActivity;
 import channa.com.catchat.adapters.FriendListAdapter;
 import channa.com.catchat.models.User;
 
@@ -36,6 +38,9 @@ import channa.com.catchat.models.User;
 public class FriendsTab extends Fragment {
 
     private static final String TAG = "FriendsTab";
+
+    // Arbitrary request code values
+    public static final int RC_SIGN_IN = 1;
 
     // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
@@ -110,8 +115,14 @@ public class FriendsTab extends Fragment {
                 }
                 // Signed out
                 else {
+                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    startActivity(intent);
+
                     detachDatabaseReadListener();
-                    mFriendListAdapter.clear();
+
+                    if (mFriendListAdapter != null) {
+                        mFriendListAdapter.clear();
+                    }
 
                     Log.d(TAG, "onAuthStateChanged: signed out: ");
                 }
@@ -193,6 +204,9 @@ public class FriendsTab extends Fragment {
         mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
 
         detachDatabaseReadListener();
-        mFriendListAdapter.clear();
+
+        if (mFriendListAdapter != null) {
+            mFriendListAdapter.clear();
+        }
     }
 }

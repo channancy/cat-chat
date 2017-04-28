@@ -30,15 +30,13 @@
             android:background="@drawable/bubble_left"
             android:text="Friend: Hey there!"/>
 
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/iv_friend_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bubble_left"/>
 
-    <ImageView
-        android:id="@+id/iv_friend_photo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:background="@color/colorPrimary"
-        android:scaleType="fitCenter"/>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tv_friend_message_timestamp"
