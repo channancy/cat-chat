@@ -79,6 +79,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 ((MyMessageHolder) holder).myPhoto.setVisibility(View.VISIBLE);
                 Glide.with(((MyMessageHolder) holder).myPhoto.getContext())
                         .load(message.getPhotoUrl())
+                        .fitCenter()
                         .into(((MyMessageHolder) holder).myPhoto);
             }
             else {
@@ -100,6 +101,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 ((FriendMessageHolder) holder).friendPhoto.setVisibility(View.VISIBLE);
                 Glide.with(((FriendMessageHolder) holder).friendPhoto.getContext())
                         .load(message.getPhotoUrl())
+                        .fitCenter()
                         .into(((FriendMessageHolder) holder).friendPhoto);
             }
             else {
