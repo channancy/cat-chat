@@ -73,7 +73,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Message message = mMessages.get(position);
         boolean isPhoto = message.getPhotoUrl() != null;
 
+        // My messages
         if (mUserID.equals(message.getUserID())) {
+            // Photo message
             if (isPhoto) {
                 ((MyMessageHolder) holder).myMessage.setVisibility(View.GONE);
                 ((MyMessageHolder) holder).myPhoto.setVisibility(View.VISIBLE);
@@ -82,12 +84,14 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         .fitCenter()
                         .into(((MyMessageHolder) holder).myPhoto);
             }
+            // Text message
             else {
                 ((MyMessageHolder) holder).myPhoto.setVisibility(View.GONE);
                 ((MyMessageHolder) holder).myMessage.setVisibility(View.VISIBLE);
                 ((MyMessageHolder) holder).myMessage.setText(message.getText());
             }
 
+            // Timestamp
             Date date = new Date(message.getDateCreatedLong());
             String formattedDate = mSimpleDateFormat.format(date);
             ((MyMessageHolder) holder).myMessageTimestamp.setText(formattedDate);
@@ -95,7 +99,25 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 //            Log.d(TAG, "Locale.getDefault() " + Locale.getDefault());
 //            Log.d(TAG, "mTimeZone: " + mTimeZone);
         }
+
+        // Friends' messages
         else {
+            // Use uploaded profile picture
+            if (message.getAvatarUrl() != null) {
+                Glide.with(((FriendMessageHolder) holder).friendAvatar.getContext())
+                        .load(message.getAvatarUrl())
+                        .fitCenter()
+                        .into(((FriendMessageHolder) holder).friendAvatar);
+            }
+            // Otherwise, use default profile picture
+            else {
+                Glide.with(((FriendMessageHolder) holder).friendAvatar.getContext())
+                        .load("http://goo.gl/gEgYUd")
+                        .fitCenter()
+                        .into(((FriendMessageHolder) holder).friendAvatar);
+            }
+
+            // Photo message
             if (isPhoto) {
                 ((FriendMessageHolder) holder).friendMessage.setVisibility(View.GONE);
                 ((FriendMessageHolder) holder).friendPhoto.setVisibility(View.VISIBLE);
@@ -104,12 +126,14 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         .fitCenter()
                         .into(((FriendMessageHolder) holder).friendPhoto);
             }
+            // Text message
             else {
                 ((FriendMessageHolder) holder).friendPhoto.setVisibility(View.GONE);
                 ((FriendMessageHolder) holder).friendMessage.setVisibility(View.VISIBLE);
                 ((FriendMessageHolder) holder).friendMessage.setText(message.getText());
             }
 
+            // Timestamp
             Date date = new Date(message.getDateCreatedLong());
             String formattedDate = mSimpleDateFormat.format(date);
             ((FriendMessageHolder) holder).friendMessageTimestamp.setText(formattedDate);

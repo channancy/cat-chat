@@ -40,13 +40,14 @@ public class FriendDialog extends DialogFragment {
 
     private Map<String, Boolean> mMemberIDList = new HashMap<>();
 
-    public static FriendDialog newInstance(String userID, String friendID, String friendName, String friendAvatar) {
+    public static FriendDialog newInstance(String userID, String userAvatarUrl, String friendID, String friendName, String friendAvatarUrl) {
         FriendDialog frag = new FriendDialog();
         Bundle args = new Bundle();
         args.putString("userID", userID);
+        args.putString("userAvatarUrl", userAvatarUrl);
         args.putString("friendID", friendID);
         args.putString("friendName", friendName);
-        args.putString("friendAvatar", friendAvatar);
+        args.putString("friendAvatarUrl", friendAvatarUrl);
         frag.setArguments(args);
 
         return frag;
@@ -70,9 +71,10 @@ public class FriendDialog extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final String userID = getArguments().getString("userID");
+        final String userAvatarUrl = getArguments().getString("userAvatarUrl");
         final String friendID = getArguments().getString("friendID");
         final String friendName = getArguments().getString("friendName");
-        final String friendAvatar = getArguments().getString("friendAvatar");
+        final String friendAvatarUrl = getArguments().getString("friendAvatarUrl");
 
         View v = inflater.inflate(R.layout.fragment_friend_dialog, container, false);
         TextView tvTitle = (TextView) v.findViewById(R.id.tv_friend_dialog_title);
@@ -111,7 +113,8 @@ public class FriendDialog extends DialogFragment {
                             // Load messages
                             Bundle args = new Bundle();
                             args.putString("chatID", membersKey);
-                            args.putString("avatarUrl", friendAvatar);
+                            args.putString("userAvatarUrl", userAvatarUrl);
+                            args.putString("friendAvatarUrl", friendAvatarUrl);
                             args.putString("friendName", friendName);
                             Intent intent = new Intent(getActivity(), ChatActivity.class);
                             intent.putExtras(args);
@@ -141,7 +144,10 @@ public class FriendDialog extends DialogFragment {
 
                             // Load messages
                             Bundle args = new Bundle();
-                            args.putString("chatID", key);
+                            args.putString("chatID", membersKey);
+                            args.putString("userAvatarUrl", userAvatarUrl);
+                            args.putString("friendAvatarUrl", friendAvatarUrl);
+                            args.putString("friendName", friendName);
                             Intent intent = new Intent(getActivity(), ChatActivity.class);
                             intent.putExtras(args);
                             dismiss();

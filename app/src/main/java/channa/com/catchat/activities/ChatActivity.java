@@ -62,6 +62,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private String mUsername;
     private String mUserID;
+    private String mUserAvatarUrl;
     private List<Message> mMessageList = new ArrayList<>();
     private LinearLayoutManager mLinearLayoutManager;
 
@@ -87,7 +88,9 @@ public class ChatActivity extends AppCompatActivity {
         mFirebaseStorage = FirebaseStorage.getInstance();
 
         final String chatID = getIntent().getExtras().getString("chatID");
-        final String avatarUrl = getIntent().getExtras().getString("avatarUrl");
+        mUserAvatarUrl = getIntent().getExtras().getString("userAvatarUrl");
+        Log.d(TAG, "user avatar: " + mUserAvatarUrl);
+        final String friendAvatarUrl = getIntent().getExtras().getString("friendAvatarUrl");
         final String friendName = getIntent().getExtras().getString("friendName");
         Log.d(TAG, "onCreate: " + chatID);
 
@@ -127,9 +130,9 @@ public class ChatActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Message message = new Message(avatarUrl, mUsername, etMessage.getText().toString(), null, mUserID, null);
+                Message message = new Message(mUserAvatarUrl, mUsername, etMessage.getText().toString(), null, mUserID, null);
                 mMessagesDatabaseReference.push().setValue(message);
-                Chat chat = new Chat(avatarUrl, friendName, etMessage.getText().toString(), null);
+                Chat chat = new Chat(friendAvatarUrl, friendName, etMessage.getText().toString(), null);
                 mChatsDatabaseReference.setValue(chat);
 
                 // Clear input box
@@ -279,7 +282,7 @@ public class ChatActivity extends AppCompatActivity {
                     // Get url from taskSnapshot
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                     // Create object
-                    Message message = new Message(null, mUsername, null, downloadUrl.toString(), mUserID, null);
+                    Message message = new Message(mUserAvatarUrl, mUsername, null, downloadUrl.toString(), mUserID, null);
                     // Store object in database
                     mMessagesDatabaseReference.push().setValue(message);
                 }

@@ -34,13 +34,15 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
 
     private Context mContext;
     private LayoutInflater mLayoutInflater;
-    private String userID;
+    private String mUserID;
+    private String mUserAvatarUrl;
     private List<User> mFriendList = new ArrayList<>();
 
-    public FriendListAdapter(Context context, String userID) {
-        this.mContext = context;
+    public FriendListAdapter(Context context, String userID, String userAvatarUrl) {
+        mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
-        this.userID = userID;
+        mUserID = userID;
+        mUserAvatarUrl = userAvatarUrl;
     }
 
     @Override
@@ -86,7 +88,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
             User friend = mFriendList.get(getAdapterPosition());
 
             Log.d(TAG, "onClick: " + friend.getName());
-            showDialog(userID, friend.getId(), friend.getName(), friend.getAvatarUrl());
+            showDialog(mUserID, mUserAvatarUrl, friend.getId(), friend.getName(), friend.getAvatarUrl());
         }
     }
 
@@ -104,7 +106,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         notifyDataSetChanged();
     }
 
-    private void showDialog(String userID, String friendID, String friendName, String friendAvatar) {
+    private void showDialog(String userID, String userAvatarUrl, String friendID, String friendName, String friendAvatarUrl) {
         // DialogFragment.show() will take care of adding the fragment
         // in a transaction.  We also want to remove any currently showing
         // dialog, so make our own transaction and take care of that here.
@@ -115,7 +117,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         }
         ft.addToBackStack(null);
 
-        DialogFragment newFragment = FriendDialog.newInstance(userID, friendID, friendName, friendAvatar);
+        DialogFragment newFragment = FriendDialog.newInstance(userID, userAvatarUrl, friendID, friendName, friendAvatarUrl);
         newFragment.show(((Activity) mContext).getFragmentManager(), "FriendDialog");
     }
 }
