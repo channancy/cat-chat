@@ -81,7 +81,7 @@ public class FriendsTab extends Fragment {
                 if (user != null) {
                     final String userID = user.getUid();
 
-                    mFirebaseDatabase.getReference().child("users").child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+                    mFirebaseDatabase.getReference().child("users").child(userID).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             // Deserialize from database to object
