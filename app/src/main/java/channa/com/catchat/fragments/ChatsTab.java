@@ -134,10 +134,10 @@ public class ChatsTab extends Fragment {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     if (mChatIDList.contains(dataSnapshot.getKey())) {
-                            Log.d(TAG, "Contains chat ID: " + dataSnapshot.getKey());
-                            Chat chat = dataSnapshot.getValue(Chat.class);
-                            mChatListAdapter.add(chat);
-                        }
+                        Log.d(TAG, "Contains chat ID: " + dataSnapshot.getKey());
+                        Chat chat = dataSnapshot.getValue(Chat.class);
+                        mChatListAdapter.add(chat);
+                    }
                 }
 
                 @Override

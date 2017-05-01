@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -92,7 +93,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 
     public void add(Chat chat) {
         mChatList.add(chat);
-//        Collections.sort(mChatList);
+        Collections.reverse(mChatList);
         notifyDataSetChanged();
     }
 
