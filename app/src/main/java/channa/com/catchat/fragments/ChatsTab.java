@@ -76,7 +76,7 @@ public class ChatsTab extends Fragment {
                 if (user != null) {
                     final String userID = user.getUid();
 
-                    Log.d(TAG, "user ID: " + userID);
+//                    Log.d(TAG, "user ID: " + userID);
 
                     // Set adapter and layout manager
                     mChatListAdapter = new ChatListAdapter(getActivity());
@@ -84,13 +84,16 @@ public class ChatsTab extends Fragment {
                     rvChatList.setAdapter(mChatListAdapter);
 
                     mChatsDatabaseReference = mFirebaseDatabase.getReference().child("chats");
+
+                    // Retrieve list of chat IDs by checking if user ID exists under chat IDs in members database
                     mMembersDatabaseReference = mFirebaseDatabase.getReference().child("members");
                     mMembersDatabaseReference.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             for (DataSnapshot child : dataSnapshot.getChildren()) {
-                                if (child.hasChild(userID)) {
+                                if (child.hasChild(userID) && !mChatIDList.contains(child.getKey())) {
                                     mChatIDList.add(child.getKey());
+                                    Log.d(TAG, "Added chat id: " + child.getKey());
                                 }
                             }
 
@@ -103,7 +106,7 @@ public class ChatsTab extends Fragment {
                         }
                     });
 
-                    Log.d(TAG, "onAuthStateChanged: signed in: " + user.getDisplayName());
+//                    Log.d(TAG, "onAuthStateChanged: signed in: " + user.getDisplayName());
                 }
                 // Signed out
                 else {
@@ -116,7 +119,7 @@ public class ChatsTab extends Fragment {
                         mChatListAdapter.clear();
                     }
 
-                    Log.d(TAG, "onAuthStateChanged: signed out: ");
+//                    Log.d(TAG, "onAuthStateChanged: signed out: ");
                 }
             }
         };
@@ -124,29 +127,17 @@ public class ChatsTab extends Fragment {
         return layout;
     }
 
+    // Add chats to adapter by checking for matches between chat ID list and chat IDs in chats database
     public void attachDatabaseReadListener() {
         if (mChildEventListener == null) {
             mChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    mChatsDatabaseReference.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (String chatID : mChatIDList) {
-                                 for (DataSnapshot child : dataSnapshot.getChildren()) {
-                                    if (child.getKey().equals(chatID)) {
-                                        Chat chat = child.getValue(Chat.class);
-                                        mChatListAdapter.add(chat);
-                                    }
-                                }
-                            }
+                    if (mChatIDList.contains(dataSnapshot.getKey())) {
+                            Log.d(TAG, "Contains chat ID: " + dataSnapshot.getKey());
+                            Chat chat = dataSnapshot.getValue(Chat.class);
+                            mChatListAdapter.add(chat);
                         }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
                 }
 
                 @Override
