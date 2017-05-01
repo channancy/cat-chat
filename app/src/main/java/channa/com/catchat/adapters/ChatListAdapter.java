@@ -89,4 +89,18 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
             lastTimestamp = (TextView) itemView.findViewById(R.id.tv_chat_last_timestamp);
         }
     }
+
+    public void add(Chat chat) {
+        mChatList.add(chat);
+//        Collections.sort(mChatList);
+        notifyDataSetChanged();
+    }
+
+    public void clear() {
+        if (mChatList.size() > 0) {
+            mChatList.clear();
+        }
+
+        notifyDataSetChanged();
+    }
 }
