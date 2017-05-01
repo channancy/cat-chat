@@ -94,7 +94,7 @@ public class FriendDialog extends DialogFragment {
 
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot child : dataSnapshot.getChildren()) {
-                            Log.d(TAG, "child: " + child.getKey());
+                            Log.d(TAG, "child key: " + child.getKey());
 
                                 // Check if user keys exist under members
                                 if (child.hasChild(userID) && child.hasChild(friendID)) {

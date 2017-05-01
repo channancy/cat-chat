@@ -39,9 +39,6 @@ public class FriendsTab extends Fragment {
 
     private static final String TAG = "FriendsTab";
 
-    // Arbitrary request code values
-    public static final int RC_SIGN_IN = 1;
-
     // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -195,7 +192,6 @@ public class FriendsTab extends Fragment {
                 }
             };
 
-            // Order by friend name
             mContactsDatabaseReference.addChildEventListener(mChildEventListener);
         }
     }
