@@ -63,6 +63,8 @@ public class ChatActivity extends AppCompatActivity {
     private String mUsername;
     private String mUserID;
     private String mUserAvatarUrl;
+    private String mFriendAvatarUrl;
+    private String mFriendName;
     private List<Message> mMessageList = new ArrayList<>();
     private LinearLayoutManager mLinearLayoutManager;
 
@@ -90,8 +92,8 @@ public class ChatActivity extends AppCompatActivity {
         final String chatID = getIntent().getExtras().getString("chatID");
         mUserAvatarUrl = getIntent().getExtras().getString("userAvatarUrl");
         Log.d(TAG, "user avatar: " + mUserAvatarUrl);
-        final String friendAvatarUrl = getIntent().getExtras().getString("friendAvatarUrl");
-        final String friendName = getIntent().getExtras().getString("friendName");
+        mFriendAvatarUrl = getIntent().getExtras().getString("friendAvatarUrl");
+        mFriendName = getIntent().getExtras().getString("friendName");
         Log.d(TAG, "onCreate: " + chatID);
 
         // ImagePickerButton shows an image picker to upload a image for a message
@@ -130,9 +132,12 @@ public class ChatActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Store in messages
                 Message message = new Message(mUserAvatarUrl, mUsername, etMessage.getText().toString(), null, mUserID, null);
                 mMessagesDatabaseReference.push().setValue(message);
-                Chat chat = new Chat(mMessagesDatabaseReference.getKey() ,friendAvatarUrl, friendName, etMessage.getText().toString(), null);
+
+                // Also store in chats
+                Chat chat = new Chat(mMessagesDatabaseReference.getKey(), mFriendAvatarUrl, mFriendName, etMessage.getText().toString(), null);
                 mChatsDatabaseReference.setValue(chat);
 
                 // Clear input box
@@ -281,10 +286,14 @@ public class ChatActivity extends AppCompatActivity {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     // Get url from taskSnapshot
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                    // Create object
+
+                    // Store in messages
                     Message message = new Message(mUserAvatarUrl, mUsername, null, downloadUrl.toString(), mUserID, null);
-                    // Store object in database
                     mMessagesDatabaseReference.push().setValue(message);
+
+                    // Also store in chats
+                    Chat chat = new Chat(mMessagesDatabaseReference.getKey(), mFriendAvatarUrl, mFriendName, mFriendName + " sent a photo.", null);
+                    mChatsDatabaseReference.setValue(chat);
                 }
             });
         }
