@@ -73,9 +73,15 @@ public class AddFriendActivity extends AppCompatActivity {
                             DataSnapshot friendFound = dataSnapshot.getChildren().iterator().next();
                             mFriend = friendFound.getValue(User.class);
                             mFriendID = friendFound.getKey();
-                            tvFriendSearchResult.setText(mFriend.getName());
-                            btnAddFriend.setVisibility(View.VISIBLE);
 
+                            if (user.getUid().equals(mFriendID)) {
+                                tvFriendSearchResult.setText("You cannot add yourself as a friend.");
+                                btnAddFriend.setVisibility(View.GONE);
+                            } else {
+                                tvFriendSearchResult.setText(mFriend.getName());
+                                btnAddFriend.setVisibility(View.VISIBLE);
+                            }
+                            
                         } catch (NoSuchElementException e) {
                             tvFriendSearchResult.setText(R.string.user_not_found);
                             btnAddFriend.setVisibility(View.GONE);
