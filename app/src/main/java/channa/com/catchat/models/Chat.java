@@ -1,19 +1,15 @@
 package channa.com.catchat.models;
 
-import android.util.Log;
-
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ServerValue;
 
 import java.util.HashMap;
 
-import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
-
 /**
  * Created by Nancy on 4/26/2017.
  */
 
-public class Chat implements Comparable<Chat> {
+public class Chat {
 
     private String avatarUrl;
     private String title;
@@ -84,20 +80,5 @@ public class Chat implements Comparable<Chat> {
     @Exclude
     public long getDateCreatedLong() {
         return (long)dateCreated.get("date");
-    }
-
-    @Override
-    public int compareTo(Chat chat) {
-        Log.d(TAG, "compareTo: ");
-
-        if (getDateCreatedLong() == chat.getDateCreatedLong()) {
-            return 0;
-        }
-        else if (getDateCreatedLong() > chat.getDateCreatedLong()) {
-            return 1;
-        }
-        else {
-            return -1;
-        }
     }
 }
