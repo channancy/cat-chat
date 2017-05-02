@@ -131,9 +131,8 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Message message = new Message(mUserAvatarUrl, mUsername, etMessage.getText().toString(), null, mUserID, null);
-                String messageKey = mMessagesDatabaseReference.push().getKey();
-                mMessagesDatabaseReference.child(messageKey).setValue(message);
-                Chat chat = new Chat(messageKey ,friendAvatarUrl, friendName, etMessage.getText().toString(), null);
+                mMessagesDatabaseReference.push().setValue(message);
+                Chat chat = new Chat(mMessagesDatabaseReference.getKey() ,friendAvatarUrl, friendName, etMessage.getText().toString(), null);
                 mChatsDatabaseReference.setValue(chat);
 
                 // Clear input box

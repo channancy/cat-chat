@@ -105,7 +105,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 
             // Load messages
             Bundle args = new Bundle();
-            args.putString("chatID", chat.getMessageID());
+            args.putString("chatID", chat.getChatID());
             args.putString("userAvatarUrl", mUserAvatarUrl);
             args.putString("friendAvatarUrl", chat.getAvatarUrl());
             args.putString("friendName", chat.getTitle());

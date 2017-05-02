@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public class Chat {
 
-    private String messageID;
+    private String chatID;
     private String avatarUrl;
     private String title;
     private String lastMessage;
@@ -22,8 +22,8 @@ public class Chat {
 
     }
 
-    public Chat(String messageID, String avatarUrl, String title, String lastMessage, HashMap<String,Object> dateCreated) {
-        this.messageID = messageID;
+    public Chat(String chatID, String avatarUrl, String title, String lastMessage, HashMap<String,Object> dateCreated) {
+        this.chatID = chatID;
         this.avatarUrl = avatarUrl;
         this.title = title;
         this.lastMessage = lastMessage;
@@ -35,12 +35,12 @@ public class Chat {
         this.dateLastChanged = dateLastChangedObj;
     }
 
-    public String getMessageID() {
-        return messageID;
+    public String getChatID() {
+        return chatID;
     }
 
-    public void setMessageID(String messageID) {
-        this.messageID = messageID;
+    public void setChatID(String chatID) {
+        this.chatID = chatID;
     }
 
     public String getAvatarUrl() {

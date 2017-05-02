@@ -144,7 +144,7 @@ public class FriendDialog extends DialogFragment {
 
                             // Load messages
                             Bundle args = new Bundle();
-                            args.putString("chatID", membersKey);
+                            args.putString("chatID", key);
                             args.putString("userAvatarUrl", userAvatarUrl);
                             args.putString("friendAvatarUrl", friendAvatarUrl);
                             args.putString("friendName", friendName);
