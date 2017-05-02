@@ -1,6 +1,8 @@
 package channa.com.catchat.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +22,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import channa.com.catchat.R;
+import channa.com.catchat.activities.ChatActivity;
 import channa.com.catchat.models.Chat;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -36,9 +39,11 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     private List<Chat> mChatList = new ArrayList<>();
     private SimpleDateFormat mSimpleDateFormat;
     private TimeZone mTimeZone;
+    private String mUserAvatarUrl;
 
-    public ChatListAdapter(Context context) {
-        this.mContext = context;
+    public ChatListAdapter(Context context, String userAvatarUrl) {
+        mContext = context;
+        mUserAvatarUrl = userAvatarUrl;
         mLayoutInflater = LayoutInflater.from(context);
 
         mSimpleDateFormat = new SimpleDateFormat("h:mm a", Locale.getDefault());
@@ -76,7 +81,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         return mChatList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         CircleImageView avatarUrl;
         TextView title;
@@ -90,6 +95,23 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
             title = (TextView) itemView.findViewById(R.id.tv_chat_title);
             lastMessage = (TextView) itemView.findViewById(R.id.tv_chat_last_message);
             lastTimestamp = (TextView) itemView.findViewById(R.id.tv_chat_last_timestamp);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            Chat chat = mChatList.get(getAdapterPosition());
+
+            // Load messages
+            Bundle args = new Bundle();
+            args.putString("chatID", chat.getMessageID());
+            args.putString("userAvatarUrl", mUserAvatarUrl);
+            args.putString("friendAvatarUrl", chat.getAvatarUrl());
+            args.putString("friendName", chat.getTitle());
+            Intent intent = new Intent(mContext, ChatActivity.class);
+            intent.putExtras(args);
+            mContext.startActivity(intent);
         }
     }
 

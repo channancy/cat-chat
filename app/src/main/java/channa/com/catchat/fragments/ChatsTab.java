@@ -30,6 +30,7 @@ import channa.com.catchat.R;
 import channa.com.catchat.activities.MainActivity;
 import channa.com.catchat.adapters.ChatListAdapter;
 import channa.com.catchat.models.Chat;
+import channa.com.catchat.models.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,8 +45,9 @@ public class ChatsTab extends Fragment {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mChatsDatabaseReference;
     private DatabaseReference mMembersDatabaseReference;
-    private DatabaseReference mMessagesDatabaseReference;
     private ChildEventListener mChildEventListener;
+
+    private String mUserAvatarUrl;
 
     private List<String> mChatIDList = new ArrayList<>();
     private List<Chat> mChatList = new ArrayList<>();
@@ -76,10 +78,23 @@ public class ChatsTab extends Fragment {
                 if (user != null) {
                     final String userID = user.getUid();
 
-//                    Log.d(TAG, "user ID: " + userID);
+                    mFirebaseDatabase.getReference().child("users").child(userID).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            // Deserialize from database to object
+                            User user = dataSnapshot.getValue(User.class);
+                            mUserAvatarUrl = user.getAvatarUrl();
+                            Log.d(TAG, "user avatar: " + mUserAvatarUrl);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
                     // Set adapter and layout manager
-                    mChatListAdapter = new ChatListAdapter(getActivity());
+                    mChatListAdapter = new ChatListAdapter(getActivity(), userID);
                     rvChatList.setLayoutManager(new LinearLayoutManager(getActivity()));
                     rvChatList.setAdapter(mChatListAdapter);
 
