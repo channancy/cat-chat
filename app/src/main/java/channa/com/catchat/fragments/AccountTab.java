@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -56,6 +57,8 @@ public class AccountTab extends Fragment {
 
     @BindView(R.id.iv_account_avatar)
     CircleImageView ivAccountAvatar;
+    @BindView(R.id.tv_account_name)
+    TextView tvAccountName;
 
     public AccountTab() {
         // Required empty public constructor
@@ -107,6 +110,8 @@ public class AccountTab extends Fragment {
                             else {
                                 Glide.with(AccountTab.this).load("http://goo.gl/gEgYUd").into(ivAccountAvatar);
                             }
+
+                            tvAccountName.setText(mUser.getName());
                         }
 
                         @Override
