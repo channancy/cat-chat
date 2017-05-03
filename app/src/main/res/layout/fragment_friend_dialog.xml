@@ -9,21 +9,27 @@
               android:paddingRight="@dimen/activity_horizontal_margin"
               android:paddingTop="@dimen/activity_vertical_margin">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/iv_friend_dialog_avatar"
-        android:layout_width="100dp"
-        android:layout_height="100dp"/>
-
     <TextView
         android:id="@+id/tv_friend_dialog_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/friend"/>
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_friend_dialog_avatar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:paddingTop="@dimen/activity_vertical_margin"/>
+
     <Button
         android:id="@+id/btn_friend_dialog_chat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/chat"/>
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@color/colorPrimary"
+        android:minHeight="@dimen/button_min_height"
+        android:text="@string/chat"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"/>
 
 </LinearLayout>
