@@ -100,29 +100,39 @@ public class AddFriendActivity extends AppCompatActivity {
 
                             Glide.with(getApplicationContext()).load(friendAvatarUrl).into(ivFriendSearchAvatar);
 
+                            // Searched for self
                             if (user.getUid().equals(mFriendID)) {
-                                // Inform user
-                                tvFriendSearchResultNotes.setText("You cannot add yourself as a friend.");
+                                tvFriendSearchResult.setVisibility(View.VISIBLE);
+                                tvFriendSearchResultNotes.setText(R.string.you_cannot_add_yourself_as_a_friend);
                                 tvFriendSearchResultNotes.setVisibility(View.VISIBLE);
+                                ivFriendSearchAvatar.setVisibility(View.VISIBLE);
 
                                 // Hide add button
                                 btnAddFriend.setVisibility(GONE);
-                            } else {
+                            }
+                            // Searched for other user
+                            else {
                                 // Check if already friends
                                 mContactsDatabaseReference.child(user.getUid()).addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
+                                        // Already friends
                                         if (dataSnapshot.hasChild(mFriendID)) {
-                                            // Inform user
-                                            tvFriendSearchResultNotes.setText("Already friends");
+                                            tvFriendSearchResult.setVisibility(View.VISIBLE);
+                                            tvFriendSearchResultNotes.setText(R.string.already_friends);
                                             tvFriendSearchResultNotes.setVisibility(View.VISIBLE);
+                                            ivFriendSearchAvatar.setVisibility(View.VISIBLE);
 
                                             // Hide add button
                                             btnAddFriend.setVisibility(GONE);
-                                        } else {
+                                        }
+                                        // Not friends yet
+                                        else {
                                             // Clear and hide message that informs user
+                                            tvFriendSearchResult.setVisibility(View.VISIBLE);
                                             tvFriendSearchResultNotes.setText("");
                                             tvFriendSearchResultNotes.setVisibility(GONE);
+                                            ivFriendSearchAvatar.setVisibility(View.VISIBLE);
 
                                             // Show add button
                                             btnAddFriend.setVisibility(View.VISIBLE);
@@ -135,9 +145,15 @@ public class AddFriendActivity extends AppCompatActivity {
                                     }
                                 });
                             }
-
-                        } catch (NoSuchElementException e) {
+                        }
+                        // User not found
+                        catch (NoSuchElementException e) {
                             tvFriendSearchResult.setText(R.string.user_not_found);
+                            tvFriendSearchResultNotes.setText("");
+                            tvFriendSearchResultNotes.setVisibility(GONE);
+                            ivFriendSearchAvatar.setVisibility(GONE);
+
+                            // Hide add button
                             btnAddFriend.setVisibility(GONE);
                         }
                     }

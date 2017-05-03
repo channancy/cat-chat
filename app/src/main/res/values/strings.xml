@@ -11,6 +11,8 @@
 
     <string name="add_friend">Add Friend</string>
     <string name="search">Search</string>
+    <string name="you_cannot_add_yourself_as_a_friend">You cannot add yourself as a friend.</string>
+    <string name="already_friends">Already friends</string>
     <string name="user_not_found">User not found</string>
     <string name="no_friends_yet">No friends yet</string>
     <string name="send">send</string>
