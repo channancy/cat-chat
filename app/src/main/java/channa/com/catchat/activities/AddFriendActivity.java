@@ -26,6 +26,8 @@ import channa.com.catchat.R;
 import channa.com.catchat.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static android.view.View.GONE;
+
 /**
  * https://firebase.google.com/docs/database/android/read-and-write
  */
@@ -38,6 +40,7 @@ public class AddFriendActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mUsersDatabaseReference;
+    private DatabaseReference mContactsDatabaseReference;
 
     private User mFriend;
     private String mFriendID;
@@ -50,6 +53,8 @@ public class AddFriendActivity extends AppCompatActivity {
     Button btnAddFriend;
     @BindView(R.id.tv_friend_search_result)
     TextView tvFriendSearchResult;
+    @BindView(R.id.tv_friend_search_result_notes)
+    TextView tvFriendSearchResultNotes;
     @BindView(R.id.iv_friend_search_avatar)
     CircleImageView ivFriendSearchAvatar;
 
@@ -63,6 +68,7 @@ public class AddFriendActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mUsersDatabaseReference = mFirebaseDatabase.getReference().child("users");
+        mContactsDatabaseReference = mFirebaseDatabase.getReference().child("contacts");
 
         final FirebaseUser user = mFirebaseAuth.getCurrentUser();
 
@@ -79,32 +85,60 @@ public class AddFriendActivity extends AppCompatActivity {
                             mFriendID = friendFound.getKey();
                             String friendAvatarUrl;
 
-                            if (user.getUid().equals(mFriendID)) {
-                                tvFriendSearchResult.setText("You cannot add yourself as a friend.");
-                                btnAddFriend.setVisibility(View.GONE);
+                            // Name
+                            tvFriendSearchResult.setText(mFriend.getName());
+
+                            // Use uploaded profile picture
+                            if (mFriend.getAvatarUrl() != null) {
+                                friendAvatarUrl = mFriend.getAvatarUrl();
+
                             }
+                            // Otherwise, use default profile picture
                             else {
-                                // Name
-                                tvFriendSearchResult.setText(mFriend.getName());
+                                friendAvatarUrl = "http://goo.gl/gEgYUd";
+                            }
 
-                                // Use uploaded profile picture
-                                if (mFriend.getAvatarUrl() != null) {
-                                    friendAvatarUrl = mFriend.getAvatarUrl();
+                            Glide.with(getApplicationContext()).load(friendAvatarUrl).into(ivFriendSearchAvatar);
 
-                                }
-                                // Otherwise, use default profile picture
-                                else {
-                                    friendAvatarUrl = "http://goo.gl/gEgYUd";
-                                }
+                            if (user.getUid().equals(mFriendID)) {
+                                // Inform user
+                                tvFriendSearchResultNotes.setText("You cannot add yourself as a friend.");
+                                tvFriendSearchResultNotes.setVisibility(View.VISIBLE);
 
-                                Glide.with(getApplicationContext()).load(friendAvatarUrl).into(ivFriendSearchAvatar);
+                                // Hide add button
+                                btnAddFriend.setVisibility(GONE);
+                            } else {
+                                // Check if already friends
+                                mContactsDatabaseReference.child(user.getUid()).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.hasChild(mFriendID)) {
+                                            // Inform user
+                                            tvFriendSearchResultNotes.setText("Already friends");
+                                            tvFriendSearchResultNotes.setVisibility(View.VISIBLE);
 
-                                btnAddFriend.setVisibility(View.VISIBLE);
+                                            // Hide add button
+                                            btnAddFriend.setVisibility(GONE);
+                                        } else {
+                                            // Clear and hide message that informs user
+                                            tvFriendSearchResultNotes.setText("");
+                                            tvFriendSearchResultNotes.setVisibility(GONE);
+
+                                            // Show add button
+                                            btnAddFriend.setVisibility(View.VISIBLE);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
                             }
 
                         } catch (NoSuchElementException e) {
                             tvFriendSearchResult.setText(R.string.user_not_found);
-                            btnAddFriend.setVisibility(View.GONE);
+                            btnAddFriend.setVisibility(GONE);
                         }
                     }
 
