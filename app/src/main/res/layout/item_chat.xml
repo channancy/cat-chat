@@ -19,8 +19,10 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/iv_friend_avatar_chat"
         android:layout_toRightOf="@+id/iv_friend_avatar_chat"
+        android:paddingEnd="0dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:text="First Last"/>
+        android:paddingRight="0dp"
+        android:paddingStart="@dimen/activity_horizontal_margin"/>
 
     <TextView
         android:id="@+id/tv_chat_last_message"
@@ -29,14 +31,16 @@
         android:layout_below="@+id/tv_chat_title"
         android:layout_toEndOf="@+id/iv_friend_avatar_chat"
         android:layout_toRightOf="@+id/iv_friend_avatar_chat"
+        android:paddingEnd="0dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:text="This is the last message..."/>
+        android:paddingRight="0dp"
+        android:paddingStart="@dimen/activity_horizontal_margin"/>
 
     <TextView
         android:id="@+id/tv_chat_last_timestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:text="1:35pm"/>
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"/>
 
 </RelativeLayout>
