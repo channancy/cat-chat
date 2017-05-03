@@ -132,7 +132,6 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
             // Load messages
             Bundle args = new Bundle();
             args.putString("chatID", chat.getChatID());
-            args.putString("userAvatarUrl", mUserID);
             Intent intent = new Intent(mContext, ChatActivity.class);
             intent.putExtras(args);
             mContext.startActivity(intent);
