@@ -62,9 +62,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private String mUsername;
     private String mUserID;
-    private String mUserAvatarUrl;
-    private String mFriendAvatarUrl;
-    private String mFriendName;
+
     private List<Message> mMessageList = new ArrayList<>();
     private LinearLayoutManager mLinearLayoutManager;
 
@@ -90,11 +88,6 @@ public class ChatActivity extends AppCompatActivity {
         mFirebaseStorage = FirebaseStorage.getInstance();
 
         final String chatID = getIntent().getExtras().getString("chatID");
-        mUserAvatarUrl = getIntent().getExtras().getString("userAvatarUrl");
-        Log.d(TAG, "user avatar: " + mUserAvatarUrl);
-        mFriendAvatarUrl = getIntent().getExtras().getString("friendAvatarUrl");
-        mFriendName = getIntent().getExtras().getString("friendName");
-        Log.d(TAG, "onCreate: " + chatID);
 
         // ImagePickerButton shows an image picker to upload a image for a message
         btnPhotoPicker.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +130,7 @@ public class ChatActivity extends AppCompatActivity {
                 mMessagesDatabaseReference.push().setValue(message);
 
                 // Also store in chats
-                Chat chat = new Chat(mMessagesDatabaseReference.getKey(), mFriendAvatarUrl, mFriendName, etMessage.getText().toString(), null);
+                Chat chat = new Chat(mMessagesDatabaseReference.getKey(), mUserID, mUsername, etMessage.getText().toString(), null);
                 mChatsDatabaseReference.setValue(chat);
 
                 // Clear input box
@@ -292,7 +285,7 @@ public class ChatActivity extends AppCompatActivity {
                     mMessagesDatabaseReference.push().setValue(message);
 
                     // Also store in chats
-                    Chat chat = new Chat(mMessagesDatabaseReference.getKey(), mFriendAvatarUrl, mFriendName, mUsername + " sent a photo.", null);
+                    Chat chat = new Chat(mMessagesDatabaseReference.getKey(), mUserID, mUsername, mUsername + " sent a photo.", null);
                     mChatsDatabaseReference.setValue(chat);
                 }
             });

@@ -47,8 +47,6 @@ public class FriendsTab extends Fragment {
     private DatabaseReference mUsersDatabaseReference;
     private ChildEventListener mChildEventListener;
 
-    private String mUserAvatarUrl;
-
     private List<User> mFriendList = new ArrayList<>();
     private FriendListAdapter mFriendListAdapter;
     @BindView(R.id.rv_friend_list)
@@ -78,23 +76,8 @@ public class FriendsTab extends Fragment {
                 if (user != null) {
                     final String userID = user.getUid();
 
-                    mFirebaseDatabase.getReference().child("users").child(userID).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            // Deserialize from database to object
-                            User user = dataSnapshot.getValue(User.class);
-                            mUserAvatarUrl = user.getAvatarUrl();
-                            Log.d(TAG, "user avatar: " + mUserAvatarUrl);
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
                     // Set adapter and layout manager
-                    mFriendListAdapter = new FriendListAdapter(getActivity(), userID, mUserAvatarUrl);
+                    mFriendListAdapter = new FriendListAdapter(getActivity(), userID);
                     rvFriendList.setLayoutManager(new LinearLayoutManager(getActivity()));
                     rvFriendList.setAdapter(mFriendListAdapter);
 

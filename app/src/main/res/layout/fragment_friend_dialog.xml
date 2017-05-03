@@ -4,6 +4,11 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content">
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_friend_dialog_avatar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"/>
+
     <TextView
         android:id="@+id/tv_friend_dialog_title"
         android:layout_width="wrap_content"

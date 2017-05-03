@@ -110,14 +110,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         // Friends' messages
         else {
-            // Use uploaded profile picture
             mFirebaseDatabase = FirebaseDatabase.getInstance();
             mFirebaseDatabase.getReference().child("users").child(message.getUserID()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     User user = dataSnapshot.getValue(User.class);
 
-                    // Use profile picture
+                    // Use uploaded profile picture
                     if (user.getAvatarUrl() != null) {
                         mUserAvatarUrl = user.getAvatarUrl();
 

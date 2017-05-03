@@ -11,6 +11,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,6 +28,7 @@ import java.util.TimeZone;
 import channa.com.catchat.R;
 import channa.com.catchat.activities.ChatActivity;
 import channa.com.catchat.models.Chat;
+import channa.com.catchat.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -34,16 +39,19 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 
     private final static String TAG = "ChatListAdapter";
 
+    private FirebaseDatabase mFirebaseDatabase;
+
     private Context mContext;
     private LayoutInflater mLayoutInflater;
     private List<Chat> mChatList = new ArrayList<>();
     private SimpleDateFormat mSimpleDateFormat;
     private TimeZone mTimeZone;
+    private String mUserID;
     private String mUserAvatarUrl;
 
-    public ChatListAdapter(Context context, String userAvatarUrl) {
+    public ChatListAdapter(Context context, String userID) {
         mContext = context;
-        mUserAvatarUrl = userAvatarUrl;
+        mUserID = userID;
         mLayoutInflater = LayoutInflater.from(context);
 
         mSimpleDateFormat = new SimpleDateFormat("h:mm a", Locale.getDefault());
@@ -59,8 +67,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Chat chat = mChatList.get(position);
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final Chat chat = mChatList.get(position);
         holder.title.setText(chat.getName());
         holder.lastMessage.setText(chat.getLastMessage());
 
@@ -68,12 +76,30 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         String formattedDate = mSimpleDateFormat.format(date);
         holder.lastTimestamp.setText(formattedDate);
 
-        if (chat.getUserID() != null) {
-            Glide.with(mContext).load(chat.getUserID()).into(holder.avatarUrl);
-        }
-        else {
-            Glide.with(mContext).load("http://goo.gl/gEgYUd").into(holder.avatarUrl);
-        }
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mFirebaseDatabase.getReference().child("users").child(chat.getUserID()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+
+                // Use uploaded profile picture
+                if (user.getAvatarUrl() != null) {
+                    mUserAvatarUrl = user.getAvatarUrl();
+
+                }
+                // Otherwise, use default profile picture
+                else {
+                    mUserAvatarUrl = "http://goo.gl/gEgYUd";
+                }
+
+                Glide.with(mContext).load(mUserAvatarUrl).into(holder.avatarUrl);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -106,9 +132,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
             // Load messages
             Bundle args = new Bundle();
             args.putString("chatID", chat.getChatID());
-            args.putString("userAvatarUrl", mUserAvatarUrl);
-            args.putString("friendAvatarUrl", chat.getUserID());
-            args.putString("friendName", chat.getName());
+            args.putString("userAvatarUrl", mUserID);
             Intent intent = new Intent(mContext, ChatActivity.class);
             intent.putExtras(args);
             mContext.startActivity(intent);

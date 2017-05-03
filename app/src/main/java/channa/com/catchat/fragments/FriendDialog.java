@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,6 +23,7 @@ import java.util.Map;
 
 import channa.com.catchat.R;
 import channa.com.catchat.activities.ChatActivity;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Nancy on 3/30/2017.
@@ -36,15 +38,13 @@ public class FriendDialog extends DialogFragment {
     // Firebase instance variables
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mMembersDatabaseReference;
-    private DatabaseReference mMessagesDatabaseReference;
 
     private Map<String, Boolean> mMemberIDList = new HashMap<>();
 
-    public static FriendDialog newInstance(String userID, String userAvatarUrl, String friendID, String friendName, String friendAvatarUrl) {
+    public static FriendDialog newInstance(String userID, String friendID, String friendName, String friendAvatarUrl) {
         FriendDialog frag = new FriendDialog();
         Bundle args = new Bundle();
         args.putString("userID", userID);
-        args.putString("userAvatarUrl", userAvatarUrl);
         args.putString("friendID", friendID);
         args.putString("friendName", friendName);
         args.putString("friendAvatarUrl", friendAvatarUrl);
@@ -64,24 +64,33 @@ public class FriendDialog extends DialogFragment {
         // Initialize Firebase components
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mMembersDatabaseReference = mFirebaseDatabase.getReference().child("members");
-        mMessagesDatabaseReference = mFirebaseDatabase.getReference().child("messages");
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final String userID = getArguments().getString("userID");
-        final String userAvatarUrl = getArguments().getString("userAvatarUrl");
-        final String friendID = getArguments().getString("friendID");
-        final String friendName = getArguments().getString("friendName");
-        final String friendAvatarUrl = getArguments().getString("friendAvatarUrl");
+        View layout = inflater.inflate(R.layout.fragment_friend_dialog, container, false);
 
-        View v = inflater.inflate(R.layout.fragment_friend_dialog, container, false);
-        TextView tvTitle = (TextView) v.findViewById(R.id.tv_friend_dialog_title);
+        final String userID = getArguments().getString("userID");
+        final String friendID = getArguments().getString("friendID");
+        String friendName = getArguments().getString("friendName");
+        String friendAvatarUrl = getArguments().getString("friendAvatarUrl");
+
+        // Friend name
+        TextView tvTitle = (TextView) layout.findViewById(R.id.tv_friend_dialog_title);
         tvTitle.setText(friendName);
 
+        // Friend avatar
+        CircleImageView ivFriendAvatar = (CircleImageView) layout.findViewById(R.id.iv_friend_dialog_avatar);
+        // If no uploaded profile picture, use default profile picture
+        if (friendAvatarUrl == null) {
+            friendAvatarUrl = "http://goo.gl/gEgYUd";
+
+        }
+        Glide.with(getActivity()).load(friendAvatarUrl).into(ivFriendAvatar);
+
         // Click Chat
-        Button button = (Button) v.findViewById(R.id.btn_friend_dialog_chat);
+        Button button = (Button) layout.findViewById(R.id.btn_friend_dialog_chat);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
@@ -113,9 +122,6 @@ public class FriendDialog extends DialogFragment {
                             // Load messages
                             Bundle args = new Bundle();
                             args.putString("chatID", membersKey);
-                            args.putString("userAvatarUrl", userAvatarUrl);
-                            args.putString("friendAvatarUrl", friendAvatarUrl);
-                            args.putString("friendName", friendName);
                             Intent intent = new Intent(getActivity(), ChatActivity.class);
                             intent.putExtras(args);
                             dismiss();
@@ -145,9 +151,6 @@ public class FriendDialog extends DialogFragment {
                             // Load messages
                             Bundle args = new Bundle();
                             args.putString("chatID", key);
-                            args.putString("userAvatarUrl", userAvatarUrl);
-                            args.putString("friendAvatarUrl", friendAvatarUrl);
-                            args.putString("friendName", friendName);
                             Intent intent = new Intent(getActivity(), ChatActivity.class);
                             intent.putExtras(args);
                             dismiss();
@@ -163,6 +166,6 @@ public class FriendDialog extends DialogFragment {
             }
         });
 
-        return v;
+        return layout;
     }
 }
