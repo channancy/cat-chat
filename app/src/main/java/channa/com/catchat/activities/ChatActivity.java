@@ -133,7 +133,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Store in messages
-                Message message = new Message(mUserAvatarUrl, mUsername, etMessage.getText().toString(), null, mUserID, null);
+                Message message = new Message(mUsername, etMessage.getText().toString(), null, mUserID, null);
                 mMessagesDatabaseReference.push().setValue(message);
 
                 // Also store in chats
@@ -288,7 +288,7 @@ public class ChatActivity extends AppCompatActivity {
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
                     // Store in messages
-                    Message message = new Message(mUserAvatarUrl, mUsername, null, downloadUrl.toString(), mUserID, null);
+                    Message message = new Message(mUsername, null, downloadUrl.toString(), mUserID, null);
                     mMessagesDatabaseReference.push().setValue(message);
 
                     // Also store in chats

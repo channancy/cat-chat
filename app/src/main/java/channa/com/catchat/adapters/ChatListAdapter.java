@@ -61,15 +61,15 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Chat chat = mChatList.get(position);
-        holder.title.setText(chat.getTitle());
+        holder.title.setText(chat.getName());
         holder.lastMessage.setText(chat.getLastMessage());
 
         Date date = new Date(chat.getDateCreatedLong());
         String formattedDate = mSimpleDateFormat.format(date);
         holder.lastTimestamp.setText(formattedDate);
 
-        if (chat.getAvatarUrl() != null) {
-            Glide.with(mContext).load(chat.getAvatarUrl()).into(holder.avatarUrl);
+        if (chat.getUserID() != null) {
+            Glide.with(mContext).load(chat.getUserID()).into(holder.avatarUrl);
         }
         else {
             Glide.with(mContext).load("http://goo.gl/gEgYUd").into(holder.avatarUrl);
@@ -107,8 +107,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
             Bundle args = new Bundle();
             args.putString("chatID", chat.getChatID());
             args.putString("userAvatarUrl", mUserAvatarUrl);
-            args.putString("friendAvatarUrl", chat.getAvatarUrl());
-            args.putString("friendName", chat.getTitle());
+            args.putString("friendAvatarUrl", chat.getUserID());
+            args.putString("friendName", chat.getName());
             Intent intent = new Intent(mContext, ChatActivity.class);
             intent.putExtras(args);
             mContext.startActivity(intent);

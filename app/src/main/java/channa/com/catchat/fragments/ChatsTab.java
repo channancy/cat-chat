@@ -50,7 +50,6 @@ public class ChatsTab extends Fragment {
     private String mUserAvatarUrl;
 
     private List<String> mChatIDList = new ArrayList<>();
-    private List<Chat> mChatList = new ArrayList<>();
     private ChatListAdapter mChatListAdapter;
     @BindView(R.id.rv_chat_list)
     RecyclerView rvChatList;

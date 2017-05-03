@@ -12,7 +12,6 @@ import java.util.HashMap;
 
 public class Message {
 
-    private String avatarUrl;
     private String name;
     private String text;
     private String photoUrl;
@@ -24,8 +23,7 @@ public class Message {
 
     }
 
-    public Message(String avatarUrl, String name, String text, String photoUrl, String userID, HashMap<String,Object> dateCreated) {
-        this.avatarUrl = avatarUrl;
+    public Message(String name, String text, String photoUrl, String userID, HashMap<String,Object> dateCreated) {
         this.name = name;
         this.text = text;
         this.photoUrl = photoUrl;
@@ -36,14 +34,6 @@ public class Message {
         HashMap<String, Object> dateLastChangedObj = new HashMap<String, Object>();
         dateLastChangedObj.put("date", ServerValue.TIMESTAMP);
         this.dateLastChanged = dateLastChangedObj;
-    }
-
-    public String getAvatarUrl() {
-        return avatarUrl;
-    }
-
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
     }
 
     public String getName() {

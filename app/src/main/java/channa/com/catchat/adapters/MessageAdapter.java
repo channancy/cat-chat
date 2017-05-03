@@ -10,6 +10,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,6 +24,7 @@ import java.util.TimeZone;
 
 import channa.com.catchat.R;
 import channa.com.catchat.models.Message;
+import channa.com.catchat.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -33,9 +38,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public final static int MY_MESSAGE = 0;
     public final static int FRIEND_MESSAGE = 1;
 
+    private FirebaseDatabase mFirebaseDatabase;
+
     private Context mContext;
     private LayoutInflater mLayoutInflater;
     private String mUserID;
+    private String mUserAvatarUrl;
     private List<Message> mMessages = new ArrayList<>();
     private SimpleDateFormat mSimpleDateFormat;
     private TimeZone mTimeZone;
@@ -69,8 +77,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Message message = mMessages.get(position);
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+        final Message message = mMessages.get(position);
         boolean isPhoto = message.getPhotoUrl() != null;
 
         // My messages
@@ -103,19 +111,33 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         // Friends' messages
         else {
             // Use uploaded profile picture
-            if (message.getAvatarUrl() != null) {
-                Glide.with(((FriendMessageHolder) holder).friendAvatar.getContext())
-                        .load(message.getAvatarUrl())
-                        .fitCenter()
-                        .into(((FriendMessageHolder) holder).friendAvatar);
-            }
-            // Otherwise, use default profile picture
-            else {
-                Glide.with(((FriendMessageHolder) holder).friendAvatar.getContext())
-                        .load("http://goo.gl/gEgYUd")
-                        .fitCenter()
-                        .into(((FriendMessageHolder) holder).friendAvatar);
-            }
+            mFirebaseDatabase = FirebaseDatabase.getInstance();
+            mFirebaseDatabase.getReference().child("users").child(message.getUserID()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User user = dataSnapshot.getValue(User.class);
+
+                    // Use profile picture
+                    if (user.getAvatarUrl() != null) {
+                        mUserAvatarUrl = user.getAvatarUrl();
+
+                    }
+                    // Otherwise, use default profile picture
+                    else {
+                        mUserAvatarUrl = "http://goo.gl/gEgYUd";
+                    }
+
+                    Glide.with(((FriendMessageHolder) holder).friendAvatar.getContext())
+                            .load(mUserAvatarUrl)
+                            .fitCenter()
+                            .into(((FriendMessageHolder) holder).friendAvatar);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
 
             // Photo message
             if (isPhoto) {
@@ -162,7 +184,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         ImageView myPhoto;
         TextView myMessageTimestamp;
 
-        public MyMessageHolder (View itemView) {
+        public MyMessageHolder(View itemView) {
             super(itemView);
 
             myMessageContainer = (LinearLayout) itemView.findViewById(R.id.ll_my_message_container);
@@ -179,7 +201,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         ImageView friendPhoto;
         TextView friendMessageTimestamp;
 
-        public FriendMessageHolder (View itemView) {
+        public FriendMessageHolder(View itemView) {
             super(itemView);
 
             friendMessageContainer = (LinearLayout) itemView.findViewById(R.id.ll_friend_message_container);
