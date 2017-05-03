@@ -10,9 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -59,6 +61,8 @@ public class AccountTab extends Fragment {
     CircleImageView ivAccountAvatar;
     @BindView(R.id.tv_account_name)
     TextView tvAccountName;
+    @BindView(R.id.btn_sign_out)
+    Button btnSignOut;
 
     public AccountTab() {
         // Required empty public constructor
@@ -111,6 +115,7 @@ public class AccountTab extends Fragment {
                                 Glide.with(AccountTab.this).load("http://goo.gl/gEgYUd").into(ivAccountAvatar);
                             }
 
+                            // Set user name
                             tvAccountName.setText(mUser.getName());
                         }
 
@@ -127,6 +132,7 @@ public class AccountTab extends Fragment {
             }
         };
 
+        // Click profile picture to change
         ivAccountAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,6 +140,14 @@ public class AccountTab extends Fragment {
                 intent.setType("image/*");
                 intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
                 startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
+            }
+        });
+
+        // Sign out
+        btnSignOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AuthUI.getInstance().signOut(getActivity());
             }
         });
 

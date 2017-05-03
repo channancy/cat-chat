@@ -183,10 +183,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, AddFriendActivity.class);
                 startActivity(intent);
                 return true;
-            case R.id.sign_out_menu:
-                // Sign out
-                AuthUI.getInstance().signOut(this);
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
