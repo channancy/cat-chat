@@ -18,7 +18,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:paddingEnd="0dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:text="First Last"/>
+        android:paddingRight="0dp"
+        android:paddingStart="@dimen/activity_horizontal_margin"/>
 
 </LinearLayout>

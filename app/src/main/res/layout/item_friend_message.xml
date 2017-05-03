@@ -27,8 +27,7 @@
             android:id="@+id/tv_friend_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bubble_left"
-            android:text="Friend: Hey there!"/>
+            android:background="@drawable/bubble_left"/>
 
         <ImageView
             android:id="@+id/iv_friend_photo"
@@ -46,7 +45,6 @@
         android:layout_marginLeft="-100dp"
         android:layout_marginStart="-100dp"
         android:layout_toEndOf="@+id/ll_friend_message_container"
-        android:layout_toRightOf="@+id/ll_friend_message_container"
-        android:text="5:00 PM"/>
+        android:layout_toRightOf="@+id/ll_friend_message_container"/>
 
 </RelativeLayout>
