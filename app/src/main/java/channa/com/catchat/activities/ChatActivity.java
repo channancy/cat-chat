@@ -292,7 +292,7 @@ public class ChatActivity extends AppCompatActivity {
                     mMessagesDatabaseReference.push().setValue(message);
 
                     // Also store in chats
-                    Chat chat = new Chat(mMessagesDatabaseReference.getKey(), mFriendAvatarUrl, mFriendName, mFriendName + " sent a photo.", null);
+                    Chat chat = new Chat(mMessagesDatabaseReference.getKey(), mFriendAvatarUrl, mFriendName, mUsername + " sent a photo.", null);
                     mChatsDatabaseReference.setValue(chat);
                 }
             });
