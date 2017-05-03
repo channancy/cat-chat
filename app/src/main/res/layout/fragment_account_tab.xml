@@ -2,15 +2,22 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:gravity="center_horizontal"
+              android:orientation="vertical"
               tools:context="channa.com.catchat.fragments.AccountTab">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/iv_account_avatar"
-        android:layout_width="100dp"
-        android:layout_height="100dp"/>
+    <de.hdodenhof.circleimageview.CircleImageView android:id="@+id/iv_account_avatar"
+                                                  android:layout_width="100dp"
+                                                  android:layout_height="100dp"/>
 
     <TextView android:id="@+id/tv_account_name"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btn_sign_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sign_out"/>
 
 </LinearLayout>
