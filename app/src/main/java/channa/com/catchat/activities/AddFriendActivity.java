@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +24,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import channa.com.catchat.R;
 import channa.com.catchat.models.User;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * https://firebase.google.com/docs/database/android/read-and-write
@@ -48,6 +50,8 @@ public class AddFriendActivity extends AppCompatActivity {
     Button btnAddFriend;
     @BindView(R.id.tv_friend_search_result)
     TextView tvFriendSearchResult;
+    @BindView(R.id.iv_friend_search_avatar)
+    CircleImageView ivFriendSearchAvatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,15 +77,31 @@ public class AddFriendActivity extends AppCompatActivity {
                             DataSnapshot friendFound = dataSnapshot.getChildren().iterator().next();
                             mFriend = friendFound.getValue(User.class);
                             mFriendID = friendFound.getKey();
+                            String friendAvatarUrl;
 
                             if (user.getUid().equals(mFriendID)) {
                                 tvFriendSearchResult.setText("You cannot add yourself as a friend.");
                                 btnAddFriend.setVisibility(View.GONE);
-                            } else {
+                            }
+                            else {
+                                // Name
                                 tvFriendSearchResult.setText(mFriend.getName());
+
+                                // Use uploaded profile picture
+                                if (mFriend.getAvatarUrl() != null) {
+                                    friendAvatarUrl = mFriend.getAvatarUrl();
+
+                                }
+                                // Otherwise, use default profile picture
+                                else {
+                                    friendAvatarUrl = "http://goo.gl/gEgYUd";
+                                }
+
+                                Glide.with(getApplicationContext()).load(friendAvatarUrl).into(ivFriendSearchAvatar);
+
                                 btnAddFriend.setVisibility(View.VISIBLE);
                             }
-                            
+
                         } catch (NoSuchElementException e) {
                             tvFriendSearchResult.setText(R.string.user_not_found);
                             btnAddFriend.setVisibility(View.GONE);
