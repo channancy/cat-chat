@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +46,9 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     private SimpleDateFormat mSimpleDateFormat;
     private TimeZone mTimeZone;
     private String mUserID;
-    private String mUserAvatarUrl;
+    private String mFriendID;
+    private String mFriendName;
+    private String mFriendAvatarUrl;
 
     public ChatListAdapter(Context context, String userID) {
         mContext = context;
@@ -57,6 +58,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         mSimpleDateFormat = new SimpleDateFormat("h:mm a", Locale.getDefault());
         mTimeZone = TimeZone.getDefault();
         mSimpleDateFormat.setTimeZone(this.mTimeZone);
+
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
     }
 
     @Override
@@ -69,30 +72,50 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final Chat chat = mChatList.get(position);
-        holder.title.setText(chat.getName());
         holder.lastMessage.setText(chat.getLastMessage());
 
         Date date = new Date(chat.getDateCreatedLong());
         String formattedDate = mSimpleDateFormat.format(date);
         holder.lastTimestamp.setText(formattedDate);
 
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mFirebaseDatabase.getReference().child("users").child(chat.getUserID()).addValueEventListener(new ValueEventListener() {
+        // Find member in chat who is not the logged in user (user's friend)
+        mFirebaseDatabase.getReference().child("members").child(chat.getChatID()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-
-                // Use uploaded profile picture
-                if (user.getAvatarUrl() != null) {
-                    mUserAvatarUrl = user.getAvatarUrl();
-
-                }
-                // Otherwise, use default profile picture
-                else {
-                    mUserAvatarUrl = "http://goo.gl/gEgYUd";
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    if (!child.getKey().equals(mUserID)) {
+                        mFriendID = child.getKey();
+                        break;
+                    }
                 }
 
-                Glide.with(mContext).load(mUserAvatarUrl).into(holder.avatarUrl);
+                // Get user's friend's avatar
+                mFirebaseDatabase.getReference().child("users").child(mFriendID).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        User friend = dataSnapshot.getValue(User.class);
+
+                        // Use uploaded profile picture
+                        if (friend.getAvatarUrl() != null) {
+                            mFriendAvatarUrl = friend.getAvatarUrl();
+
+                        }
+                        // Otherwise, use default profile picture
+                        else {
+                            mFriendAvatarUrl = "http://goo.gl/gEgYUd";
+                        }
+
+                        Glide.with(mContext).load(mFriendAvatarUrl).into(holder.avatarUrl);
+
+                        // Set friend name
+                        holder.title.setText(friend.getName());
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
 
             @Override
@@ -144,7 +167,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         Collections.sort(mChatList, new Comparator<Chat>() {
             @Override
             public int compare(Chat chat1, Chat chat2) {
-                Log.d(TAG, "compare: ");
+//                Log.d(TAG, "compare: ");
                 
                 if (chat1.getDateCreatedLong() == chat2.getDateCreatedLong()) {
                     return 0;

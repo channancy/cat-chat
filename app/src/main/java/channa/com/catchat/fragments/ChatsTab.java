@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,7 +82,7 @@ public class ChatsTab extends Fragment {
                             // Deserialize from database to object
                             User user = dataSnapshot.getValue(User.class);
                             mUserAvatarUrl = user.getAvatarUrl();
-                            Log.d(TAG, "user avatar: " + mUserAvatarUrl);
+//                            Log.d(TAG, "user avatar: " + mUserAvatarUrl);
                         }
 
                         @Override
@@ -107,7 +106,7 @@ public class ChatsTab extends Fragment {
                             for (DataSnapshot child : dataSnapshot.getChildren()) {
                                 if (child.hasChild(userID) && !mChatIDList.contains(child.getKey())) {
                                     mChatIDList.add(child.getKey());
-                                    Log.d(TAG, "Added chat id: " + child.getKey());
+//                                    Log.d(TAG, "Added chat id: " + child.getKey());
                                 }
                             }
 
@@ -148,7 +147,7 @@ public class ChatsTab extends Fragment {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     if (mChatIDList.contains(dataSnapshot.getKey())) {
-                        Log.d(TAG, "Contains chat ID: " + dataSnapshot.getKey());
+//                        Log.d(TAG, "Contains chat ID: " + dataSnapshot.getKey());
                         Chat chat = dataSnapshot.getValue(Chat.class);
                         mChatListAdapter.add(chat);
                     }

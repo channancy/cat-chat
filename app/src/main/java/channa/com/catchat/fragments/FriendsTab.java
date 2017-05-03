@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,13 +91,13 @@ public class FriendsTab extends Fragment {
                                 // Populate RecyclerView
                                 attachDatabaseReadListener();
 
-                                Log.d(TAG, "onDataChange: has friends");
+//                                Log.d(TAG, "onDataChange: has friends");
                             }
                             // Empty friend list
                             else {
                                 tvFriendListEmpty.setVisibility(View.VISIBLE);
 
-                                Log.d(TAG, "onDataChange: no friends");
+//                                Log.d(TAG, "onDataChange: no friends");
                             }
                         }
 
@@ -108,7 +107,7 @@ public class FriendsTab extends Fragment {
                         }
                     });
 
-                    Log.d(TAG, "onAuthStateChanged: signed in: " + user.getDisplayName());
+//                    Log.d(TAG, "onAuthStateChanged: signed in: " + user.getDisplayName());
                 }
                 // Signed out
                 else {
@@ -121,7 +120,7 @@ public class FriendsTab extends Fragment {
                         mFriendListAdapter.clear();
                     }
 
-                    Log.d(TAG, "onAuthStateChanged: signed out: ");
+//                    Log.d(TAG, "onAuthStateChanged: signed out: ");
                 }
             }
         };
@@ -141,7 +140,7 @@ public class FriendsTab extends Fragment {
                             // Deserialize from database to object
                             User friend = dataSnapshot.getValue(User.class);
                             mFriendList.add(friend);
-                            Log.d(TAG, "friend name: " + friend.getName());
+//                            Log.d(TAG, "friend name: " + friend.getName());
 
                             // Add data
                             mFriendListAdapter.add(friend);
