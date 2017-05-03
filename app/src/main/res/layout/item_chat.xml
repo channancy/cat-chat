@@ -2,7 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_friend_avatar_chat"
@@ -16,8 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/iv_friend_avatar_chat"
         android:layout_toRightOf="@+id/iv_friend_avatar_chat"
-        android:text="First Last"
-    />
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:text="First Last"/>
 
     <TextView
         android:id="@+id/tv_chat_last_message"
@@ -26,6 +29,7 @@
         android:layout_below="@+id/tv_chat_title"
         android:layout_toEndOf="@+id/iv_friend_avatar_chat"
         android:layout_toRightOf="@+id/iv_friend_avatar_chat"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
         android:text="This is the last message..."/>
 
     <TextView

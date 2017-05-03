@@ -2,7 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:orientation="horizontal">
+              android:orientation="horizontal"
+              android:paddingLeft="@dimen/activity_horizontal_margin"
+              android:paddingRight="@dimen/activity_horizontal_margin"
+              android:paddingTop="@dimen/activity_vertical_margin">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_friend_avatar"
@@ -15,6 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
         android:text="First Last"/>
 
 </LinearLayout>

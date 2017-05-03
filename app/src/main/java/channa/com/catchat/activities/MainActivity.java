@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivityForResult(
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
+                                    .setLogo(R.drawable.cat_silhouette)
                                     // SmartLock saves user's credentials and tries to log them in
                                     .setIsSmartLockEnabled(false)
                                     .setProviders(Arrays.asList(
