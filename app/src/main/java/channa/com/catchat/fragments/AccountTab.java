@@ -55,7 +55,6 @@ public class AccountTab extends Fragment {
 
     private User mUser;
     private String mUserID;
-    private String mAvatarUrl;
 
     @BindView(R.id.iv_account_avatar)
     CircleImageView ivAccountAvatar;
@@ -103,16 +102,15 @@ public class AccountTab extends Fragment {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             DataSnapshot userFound = dataSnapshot.getChildren().iterator().next();
                             mUser = userFound.getValue(User.class);
-                            mAvatarUrl = mUser.getAvatarUrl();
 
                             // Load avatar if exists
-                            if (mAvatarUrl != null) {
-                                Glide.with(AccountTab.this).load(mAvatarUrl).into(ivAccountAvatar);
+                            if (mUser.getAvatarUrl() != null) {
+                                Glide.with(AccountTab.this).load(mUser.getAvatarUrl()).into(ivAccountAvatar);
 
                             }
                             // Otherwise load default avatar
                             else {
-                                Glide.with(AccountTab.this).load("http://goo.gl/gEgYUd").into(ivAccountAvatar);
+                                Glide.with(AccountTab.this).load(R.drawable.cat_silhouette_head).into(ivAccountAvatar);
                             }
 
                             // Set user name

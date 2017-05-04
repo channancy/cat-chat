@@ -87,22 +87,19 @@ public class AddFriendActivity extends AppCompatActivity {
                             DataSnapshot friendFound = dataSnapshot.getChildren().iterator().next();
                             mFriend = friendFound.getValue(User.class);
                             mFriendID = friendFound.getKey();
-                            String friendAvatarUrl;
 
                             // Name
                             tvFriendSearchResult.setText(mFriend.getName());
 
                             // Use uploaded profile picture
                             if (mFriend.getAvatarUrl() != null) {
-                                friendAvatarUrl = mFriend.getAvatarUrl();
+                                Glide.with(getApplicationContext()).load(mFriend.getAvatarUrl()).into(ivFriendSearchAvatar);
 
                             }
                             // Otherwise, use default profile picture
                             else {
-                                friendAvatarUrl = "http://goo.gl/gEgYUd";
+                                Glide.with(getApplicationContext()).load(R.drawable.cat_silhouette_head).into(ivFriendSearchAvatar);
                             }
-
-                            Glide.with(getApplicationContext()).load(friendAvatarUrl).into(ivFriendSearchAvatar);
 
                             // Searched for self
                             if (user.getUid().equals(mFriendID)) {

@@ -59,7 +59,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
             Glide.with(mContext).load(friend.getAvatarUrl()).into(holder.friendAvatar);
         }
         else {
-            Glide.with(mContext).load("http://goo.gl/gEgYUd").into(holder.friendAvatar);
+            Glide.with(mContext).load(R.drawable.cat_silhouette_head).into(holder.friendAvatar);
         }
     }
 

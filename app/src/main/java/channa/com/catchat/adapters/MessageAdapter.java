@@ -43,7 +43,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private Context mContext;
     private LayoutInflater mLayoutInflater;
     private String mUserID;
-    private String mUserAvatarUrl;
     private List<Message> mMessages = new ArrayList<>();
     private SimpleDateFormat mSimpleDateFormat;
     private TimeZone mTimeZone;
@@ -118,18 +117,19 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                     // Use uploaded profile picture
                     if (user.getAvatarUrl() != null) {
-                        mUserAvatarUrl = user.getAvatarUrl();
+                        Glide.with(((FriendMessageHolder) holder).friendAvatar.getContext())
+                                .load(user.getAvatarUrl())
+                                .fitCenter()
+                                .into(((FriendMessageHolder) holder).friendAvatar);
 
                     }
                     // Otherwise, use default profile picture
                     else {
-                        mUserAvatarUrl = "http://goo.gl/gEgYUd";
+                        Glide.with(((FriendMessageHolder) holder).friendAvatar.getContext())
+                                .load(R.drawable.cat_silhouette_head)
+                                .fitCenter()
+                                .into(((FriendMessageHolder) holder).friendAvatar);
                     }
-
-                    Glide.with(((FriendMessageHolder) holder).friendAvatar.getContext())
-                            .load(mUserAvatarUrl)
-                            .fitCenter()
-                            .into(((FriendMessageHolder) holder).friendAvatar);
                 }
 
                 @Override

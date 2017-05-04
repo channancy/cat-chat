@@ -84,10 +84,11 @@ public class FriendDialog extends DialogFragment {
         CircleImageView ivFriendAvatar = (CircleImageView) layout.findViewById(R.id.iv_friend_dialog_avatar);
         // If no uploaded profile picture, use default profile picture
         if (friendAvatarUrl == null) {
-            friendAvatarUrl = "http://goo.gl/gEgYUd";
-
+            Glide.with(getActivity()).load(R.drawable.cat_silhouette_head).into(ivFriendAvatar);
         }
-        Glide.with(getActivity()).load(friendAvatarUrl).into(ivFriendAvatar);
+        else {
+            Glide.with(getActivity()).load(friendAvatarUrl).into(ivFriendAvatar);
+        }
 
         // Click Chat
         Button button = (Button) layout.findViewById(R.id.btn_friend_dialog_chat);

@@ -79,7 +79,9 @@ public class ChatsTab extends Fragment {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             // Deserialize from database to object
                             User user = dataSnapshot.getValue(User.class);
-                            mUserAvatarUrl = user.getAvatarUrl();
+                            if (user.getAvatarUrl() != null) {
+                                mUserAvatarUrl = user.getAvatarUrl();
+                            }
 //                            Log.d(TAG, "user avatar: " + mUserAvatarUrl);
                         }
 

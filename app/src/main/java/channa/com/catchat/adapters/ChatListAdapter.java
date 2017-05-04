@@ -47,8 +47,6 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     private TimeZone mTimeZone;
     private String mUserID;
     private String mFriendID;
-    private String mFriendName;
-    private String mFriendAvatarUrl;
 
     public ChatListAdapter(Context context, String userID) {
         mContext = context;
@@ -97,15 +95,13 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 
                         // Use uploaded profile picture
                         if (friend.getAvatarUrl() != null) {
-                            mFriendAvatarUrl = friend.getAvatarUrl();
+                            Glide.with(mContext).load(friend.getAvatarUrl()).into(holder.avatarUrl);
 
                         }
                         // Otherwise, use default profile picture
                         else {
-                            mFriendAvatarUrl = "http://goo.gl/gEgYUd";
+                            Glide.with(mContext).load(R.drawable.cat_silhouette_head).into(holder.avatarUrl);
                         }
-
-                        Glide.with(mContext).load(mFriendAvatarUrl).into(holder.avatarUrl);
 
                         // Set friend name
                         holder.title.setText(friend.getName());
