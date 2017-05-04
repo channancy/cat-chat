@@ -65,6 +65,9 @@ public class AddFriendActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_friend);
         ButterKnife.bind(this);
 
+        // Set title
+        getSupportActionBar().setTitle(R.string.add_friends);
+
         // Initialize Firebase components
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
