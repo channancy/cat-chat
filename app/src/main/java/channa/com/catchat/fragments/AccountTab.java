@@ -125,10 +125,6 @@ public class AccountTab extends Fragment {
                         }
                     });
                 }
-                // Signed out
-                else {
-
-                }
             }
         };
 

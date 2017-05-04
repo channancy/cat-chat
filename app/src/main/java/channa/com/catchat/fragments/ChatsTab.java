@@ -1,7 +1,6 @@
 package channa.com.catchat.fragments;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -26,7 +25,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import channa.com.catchat.R;
-import channa.com.catchat.activities.MainActivity;
 import channa.com.catchat.adapters.ChatListAdapter;
 import channa.com.catchat.models.Chat;
 import channa.com.catchat.models.User;
@@ -123,9 +121,6 @@ public class ChatsTab extends Fragment {
                 }
                 // Signed out
                 else {
-                    Intent intent = new Intent(getContext(), MainActivity.class);
-                    startActivity(intent);
-
                     detachDatabaseReadListener();
 
                     if (mChatListAdapter != null) {

@@ -14,9 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
-import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,7 +28,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -181,24 +178,6 @@ public class ChatActivity extends AppCompatActivity {
                     // Set layout manager and adapter
                     rvMessageList.setLayoutManager(mLinearLayoutManager);
                     rvMessageList.setAdapter(mMessageAdapter);
-
-                    Log.d(TAG, "onAuthStateChanged: signed in: " + user.getDisplayName());
-                }
-                // Signed out
-                else {
-                    onSignedOutCleanup();
-                    startActivityForResult(
-                            AuthUI.getInstance()
-                                    .createSignInIntentBuilder()
-                                    // SmartLock saves user's credentials and tries to log them in
-                                    .setIsSmartLockEnabled(false)
-                                    .setProviders(Arrays.asList(
-                                            new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                                            new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
-                                    .build(),
-                            RC_SIGN_IN);
-
-                    Log.d(TAG, "onAuthStateChanged: signed out: ");
                 }
             }
         };
@@ -254,17 +233,7 @@ public class ChatActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // If equal, the activity being returned from was sign in flow
-        if (requestCode == RC_SIGN_IN) {
-            if (resultCode == RESULT_OK) {
-                Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
-            }
-            else if (resultCode == RESULT_CANCELED){
-                Toast.makeText(this, "Sign in canceled", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        }
-        else if (requestCode == RC_PHOTO_PICKER && resultCode == RESULT_OK) {
+        if (requestCode == RC_PHOTO_PICKER && resultCode == RESULT_OK) {
             Uri selectedImageUri = data.getData();
 
             // Make child named after last path segment of the uri
