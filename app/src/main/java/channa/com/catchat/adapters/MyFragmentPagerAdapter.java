@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import channa.com.catchat.R;
 import channa.com.catchat.fragments.AccountTab;
 import channa.com.catchat.fragments.ChatsTab;
 import channa.com.catchat.fragments.FriendsTab;
@@ -17,6 +16,9 @@ import channa.com.catchat.fragments.FriendsTab;
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private final static String TAG = "MyFragmentPagerAdapter";
+    public static final int FRIENDS_TAB = 0;
+    public static final int CHATS_TAB = 1;
+    public static final int ACCOUNT_TAB = 2;
 
     private final int mNumOfTabs = 3;
     private Context mContext;
@@ -36,11 +38,11 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case 0:
+            case FRIENDS_TAB:
                 return this.mFriendsTab;
-            case 1:
+            case CHATS_TAB:
                 return this.mChatsTab;
-            case 2:
+            case ACCOUNT_TAB:
                 return this.mAccountTab;
             default:
                 return null;
@@ -50,19 +52,5 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         return mNumOfTabs;
-    }
-
-    @Override
-    public CharSequence getPageTitle(int position) {
-        switch (position) {
-            case 0:
-                return mContext.getString(R.string.friends);
-            case 1:
-                return mContext.getString(R.string.chats);
-            case 2:
-                return mContext.getString(R.string.account);
-            default:
-                return null;
-        }
     }
 }

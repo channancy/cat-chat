@@ -68,6 +68,14 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
 
+        // Set tab icons
+        TabLayout.Tab tabCall = tabLayout.getTabAt(MyFragmentPagerAdapter.FRIENDS_TAB);
+        tabCall.setIcon(R.drawable.selector_friends);
+        tabCall = tabLayout.getTabAt(MyFragmentPagerAdapter.CHATS_TAB);
+        tabCall.setIcon(R.drawable.selector_chats);
+        tabCall = tabLayout.getTabAt(MyFragmentPagerAdapter.ACCOUNT_TAB);
+        tabCall.setIcon(R.drawable.selector_account);
+
         // Initialize Firebase components
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();

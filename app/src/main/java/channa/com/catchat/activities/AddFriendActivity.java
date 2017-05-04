@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -48,7 +49,7 @@ public class AddFriendActivity extends AppCompatActivity {
     @BindView(R.id.et_friend_search)
     EditText etFriendSearch;
     @BindView(R.id.btn_friend_search_submit)
-    Button btnFriendSearchSubmit;
+    ImageView btnFriendSearchSubmit;
     @BindView(R.id.btn_add_friend)
     Button btnAddFriend;
     @BindView(R.id.tv_friend_search_result)
