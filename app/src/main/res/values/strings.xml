@@ -13,6 +13,7 @@
     <string name="already_friends">Already friends</string>
     <string name="user_not_found">User not found</string>
     <string name="no_friends_yet">No friends yet</string>
+    <string name="no_chats_yet">No chats yet</string>
 
     <string name="sign_out">Sign Out</string>
 </resources>

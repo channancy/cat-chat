@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -47,6 +48,8 @@ public class ChatsTab extends Fragment {
     private ChatListAdapter mChatListAdapter;
     @BindView(R.id.rv_chat_list)
     RecyclerView rvChatList;
+    @BindView(R.id.tv_chat_list_empty)
+    TextView tvChatListEmpty;
 
     public ChatsTab() {
         // Required empty public constructor
@@ -91,6 +94,11 @@ public class ChatsTab extends Fragment {
                             }
 
                             attachDatabaseReadListener();
+
+                            // Empty chat list
+                            if (mChatIDList.size() == 0) {
+                                tvChatListEmpty.setVisibility(View.VISIBLE);
+                            }
                         }
 
                         @Override
