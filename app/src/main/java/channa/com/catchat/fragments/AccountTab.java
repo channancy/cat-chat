@@ -100,21 +100,23 @@ public class AccountTab extends Fragment {
                     mUsersDatabaseReference.orderByChild("id").equalTo(mUserID).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            DataSnapshot userFound = dataSnapshot.getChildren().iterator().next();
-                            mUser = userFound.getValue(User.class);
+                            if (dataSnapshot.exists()) {
+                                DataSnapshot userFound = dataSnapshot.getChildren().iterator().next();
+                                mUser = userFound.getValue(User.class);
 
-                            // Load avatar if exists
-                            if (mUser.getAvatarUrl() != null) {
-                                Glide.with(AccountTab.this).load(mUser.getAvatarUrl()).into(ivAccountAvatar);
+                                // Load avatar if exists
+                                if (mUser.getAvatarUrl() != null) {
+                                    Glide.with(AccountTab.this).load(mUser.getAvatarUrl()).into(ivAccountAvatar);
 
+                                }
+                                // Otherwise load default avatar
+                                else {
+                                    Glide.with(AccountTab.this).load(R.drawable.cat_silhouette_head).into(ivAccountAvatar);
+                                }
+
+                                // Set user name
+                                tvAccountName.setText(mUser.getName());
                             }
-                            // Otherwise load default avatar
-                            else {
-                                Glide.with(AccountTab.this).load(R.drawable.cat_silhouette_head).into(ivAccountAvatar);
-                            }
-
-                            // Set user name
-                            tvAccountName.setText(mUser.getName());
                         }
 
                         @Override
