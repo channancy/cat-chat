@@ -62,11 +62,40 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Set up TabLayout with ViewPager
-        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-        viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), MainActivity.this));
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+        viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager()));
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+
+                switch(tab.getPosition()) {
+                    case MyFragmentPagerAdapter.FRIENDS_TAB:
+                        setTitle(R.string.friends);
+                        break;
+                    case MyFragmentPagerAdapter.CHATS_TAB:
+                        setTitle(R.string.chats);
+                        break;
+                    case MyFragmentPagerAdapter.ACCOUNT_TAB:
+                        setTitle(R.string.account);
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
         // Set tab icons
         TabLayout.Tab tabCall = tabLayout.getTabAt(MyFragmentPagerAdapter.FRIENDS_TAB);
