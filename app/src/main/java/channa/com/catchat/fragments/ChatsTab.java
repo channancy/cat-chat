@@ -86,6 +86,9 @@ public class ChatsTab extends Fragment {
                     mMembersDatabaseReference.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+                            // Chat list has chats
+                            tvChatListEmpty.setVisibility(View.GONE);
+
                             for (DataSnapshot child : dataSnapshot.getChildren()) {
                                 if (child.hasChild(userID) && !mChatIDList.contains(child.getKey())) {
                                     mChatIDList.add(child.getKey());
