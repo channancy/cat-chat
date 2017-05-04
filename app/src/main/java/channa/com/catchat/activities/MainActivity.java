@@ -126,12 +126,38 @@ public class MainActivity extends AppCompatActivity {
                             // Existing user
                             if (dataSnapshot.hasChild(user.getUid())) {
                                 Log.d(TAG, "existing user");
+
+                                /* Workaround for Firebase bug:
+                                   Users signing in with email will be able to save display name the second time they log in
+                                 */
+                                mUsersDatabaseReference.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        User appUser = dataSnapshot.getValue(User.class);
+                                        if (appUser.getName() == null) {
+                                            User saveUser = new User(user.getUid(), user.getDisplayName(), user.getEmail(), null);
+                                            mUsersDatabaseReference.child(user.getUid()).setValue(saveUser);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
                             }
                             // New user
                             else {
                                 User saveUser = new User(user.getUid(), user.getDisplayName(), user.getEmail(), null);
                                 mUsersDatabaseReference.child(user.getUid()).setValue(saveUser);
                                 Log.d(TAG, "new user");
+
+                                /* Workaround for Firebase bug:
+                                   Users signing in with email need to log out and log back in for the display name
+                                 */
+                                if (saveUser.getName() == null) {
+                                    AuthUI.getInstance().signOut(MainActivity.this);
+                                }
                             }
                         }
 
