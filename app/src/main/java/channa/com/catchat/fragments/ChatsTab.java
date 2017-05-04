@@ -27,7 +27,6 @@ import butterknife.ButterKnife;
 import channa.com.catchat.R;
 import channa.com.catchat.adapters.ChatListAdapter;
 import channa.com.catchat.models.Chat;
-import channa.com.catchat.models.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,8 +42,6 @@ public class ChatsTab extends Fragment {
     private DatabaseReference mChatsDatabaseReference;
     private DatabaseReference mMembersDatabaseReference;
     private ChildEventListener mChildEventListener;
-
-    private String mUserAvatarUrl;
 
     private List<String> mChatIDList = new ArrayList<>();
     private ChatListAdapter mChatListAdapter;
@@ -73,23 +70,6 @@ public class ChatsTab extends Fragment {
                 // Signed in
                 if (user != null) {
                     final String userID = user.getUid();
-
-                    mFirebaseDatabase.getReference().child("users").child(userID).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            // Deserialize from database to object
-                            User user = dataSnapshot.getValue(User.class);
-                            if (user.getAvatarUrl() != null) {
-                                mUserAvatarUrl = user.getAvatarUrl();
-                            }
-//                            Log.d(TAG, "user avatar: " + mUserAvatarUrl);
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
 
                     // Set adapter and layout manager
                     mChatListAdapter = new ChatListAdapter(getActivity(), userID);
