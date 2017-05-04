@@ -1,8 +1,8 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="channa.com.catchat.fragments.FriendsTab">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="channa.com.catchat.fragments.FriendsTab">
 
     <android.support.v7.widget.RecyclerView android:id="@+id/rv_friend_list"
                                             android:layout_width="match_parent"
@@ -13,7 +13,9 @@
         android:id="@+id/tv_friend_list_empty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center_horizontal"
         android:text="@string/no_friends_yet"
         android:visibility="gone"/>
 
-</FrameLayout>
+</RelativeLayout>
