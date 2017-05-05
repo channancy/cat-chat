@@ -116,6 +116,8 @@ public class ChatsTab extends Fragment {
                 else {
                     detachDatabaseReadListener();
 
+                    mChatIDList.clear();
+
                     if (mChatListAdapter != null) {
                         mChatListAdapter.clear();
                     }
@@ -187,6 +189,8 @@ public class ChatsTab extends Fragment {
         mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
 
         detachDatabaseReadListener();
+
+        mChatIDList.clear();
 
         if (mChatListAdapter != null) {
             mChatListAdapter.clear();
