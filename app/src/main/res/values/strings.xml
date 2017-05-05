@@ -4,6 +4,7 @@
     <string name="friends">Friends</string>
     <string name="chat">Chat</string>
     <string name="chats">Chats</string>
+    <string name="no_chats_yet">No chats yet</string>
     <string name="account">Account</string>
 
     <string name="add_friends">Add Friends</string>
@@ -13,7 +14,10 @@
     <string name="already_friends">Already friends</string>
     <string name="user_not_found">User not found</string>
     <string name="no_friends_yet">No friends yet</string>
-    <string name="no_chats_yet">No chats yet</string>
+    <string name="remove_friend">Remove Friend</string>
+    <string name="are_you_sure_you_want_to_remove_this_friend">Are you sure you want to remove this friend?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
     <string name="sign_out">Sign Out</string>
 </resources>

@@ -155,7 +155,7 @@ public class FriendsTab extends Fragment {
 
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                    
                 }
 
                 @Override
