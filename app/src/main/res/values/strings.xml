@@ -8,7 +8,7 @@
     <string name="account">Account</string>
 
     <string name="my_photo">My Photo</string>
-    <string name="friend_photo">Friend's Photo</string>
+    <string name="friend_photo">Friend\'s Photo</string>
     <string name="photo_picker">Photo Picker</string>
     <string name="send">Send</string>
 
