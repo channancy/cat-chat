@@ -31,6 +31,8 @@
         android:layout_below="@+id/tv_chat_title"
         android:layout_toEndOf="@+id/iv_friend_avatar_chat"
         android:layout_toRightOf="@+id/iv_friend_avatar_chat"
+        android:ellipsize="end"
+        android:maxLines="2"
         android:paddingEnd="0dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="0dp"
