@@ -175,6 +175,18 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         notifyDataSetChanged();
     }
 
+    public void remove(String friendID) {
+        for (User friend : mFriendList) {
+            if (friend.getId().equals(friendID)) {
+                mFriendList.remove(friend);
+                break;
+            }
+        }
+
+        Collections.sort(mFriendList);
+        notifyDataSetChanged();
+    }
+
     public void clear() {
         if (mFriendList.size() > 0) {
             mFriendList.clear();
