@@ -2,11 +2,11 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:drawable="@drawable/ic_person_add_white_24dp"
+        android:drawable="@drawable/ic_people_white_24dp"
         android:state_selected="true"/>
 
     <item
-        android:drawable="@drawable/ic_person_add_white_24dp"
+        android:drawable="@drawable/ic_people_white_24dp"
         android:state_selected="false"/>
 
 </selector>
