@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'app'
+            keyPassword 'farahmicasilas'
+            storeFile file('C:/Users/Nancy/Google Drive/Android Development/my.keystore')
+            storePassword 'farahmicasilas'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "24.0.1"
-
     defaultConfig {
         applicationId "channa.com.catchat"
         minSdkVersion 16
@@ -20,28 +27,23 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:design:25.1.0'
     compile 'com.android.support:support-v4:25.1.0'
-
     // Butterknife
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-
     // Displaying images
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
-
     // Firebase
     compile 'com.google.firebase:firebase-core:10.0.1'
     compile 'com.google.firebase:firebase-database:10.0.1'
     compile 'com.google.firebase:firebase-auth:10.0.1'
     compile 'com.google.firebase:firebase-storage:10.0.1'
     compile 'com.google.firebase:firebase-messaging:10.0.1'
-
     // FirebaseUI
     compile 'com.firebaseui:firebase-ui-auth:1.0.1'
     compile 'com.google.firebase:firebase-appindexing:10.0.1'
