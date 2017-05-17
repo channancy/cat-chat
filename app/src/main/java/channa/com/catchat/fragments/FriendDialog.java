@@ -73,7 +73,7 @@ public class FriendDialog extends DialogFragment {
 
         final String userID = getArguments().getString("userID");
         final String friendID = getArguments().getString("friendID");
-        String friendName = getArguments().getString("friendName");
+        final String friendName = getArguments().getString("friendName");
         String friendAvatarUrl = getArguments().getString("friendAvatarUrl");
 
         // Friend name
@@ -123,6 +123,7 @@ public class FriendDialog extends DialogFragment {
                             // Load messages
                             Bundle args = new Bundle();
                             args.putString("chatID", membersKey);
+                            args.putString("chatName", friendName);
                             Intent intent = new Intent(getActivity(), ChatActivity.class);
                             intent.putExtras(args);
                             dismiss();
@@ -152,6 +153,7 @@ public class FriendDialog extends DialogFragment {
                             // Load messages
                             Bundle args = new Bundle();
                             args.putString("chatID", key);
+                            args.putString("chatName", friendName);
                             Intent intent = new Intent(getActivity(), ChatActivity.class);
                             intent.putExtras(args);
                             dismiss();

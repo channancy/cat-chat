@@ -79,6 +79,11 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         ButterKnife.bind(this);
 
+        String chatName = getIntent().getExtras().getString("chatName");
+
+        // Set title
+        getSupportActionBar().setTitle(chatName);
+
         // Initialize Firebase components
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
