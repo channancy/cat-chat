@@ -47,6 +47,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     private TimeZone mTimeZone;
     private String mUserID;
     private String mFriendID;
+    private User mFriend;
 
     public ChatListAdapter(Context context, String userID) {
         mContext = context;
@@ -90,11 +91,11 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
                 mFirebaseDatabase.getReference().child("users").child(mFriendID).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        User friend = dataSnapshot.getValue(User.class);
+                        mFriend = dataSnapshot.getValue(User.class);
 
                         // Use uploaded profile picture
-                        if (friend.getAvatarUrl() != null) {
-                            Glide.with(mContext).load(friend.getAvatarUrl()).into(holder.avatarUrl);
+                        if (mFriend.getAvatarUrl() != null) {
+                            Glide.with(mContext).load(mFriend.getAvatarUrl()).into(holder.avatarUrl);
 
                         }
                         // Otherwise, use default profile picture
@@ -103,7 +104,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
                         }
 
                         // Set friend name
-                        holder.title.setText(friend.getName());
+                        holder.title.setText(mFriend.getName());
                     }
 
                     @Override
@@ -150,7 +151,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
             // Load messages
             Bundle args = new Bundle();
             args.putString("chatID", chat.getChatID());
-            args.putString("chatName", chat.getName());
+            args.putString("chatName", mFriend.getName());
             Intent intent = new Intent(mContext, ChatActivity.class);
             intent.putExtras(args);
             mContext.startActivity(intent);
