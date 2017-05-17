@@ -15,11 +15,19 @@
       },
       "oauth_client": [
         {
+          "client_id": "45427327346-kle4cufrlnr5s6d91vqe43shlg3f5nvv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "channa.com.catchat",
+            "certificate_hash": "b5d31acb207dc86ffaad5c1f2c11248b8aa3accb"
+          }
+        },
+        {
           "client_id": "45427327346-l0jeu88q012tc1ve1et16a8ujdmrsvt7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "channa.com.catchat",
-            "certificate_hash": "6ED033C583493A57DE9A136E81CFB88E039D7CF2"
+            "certificate_hash": "6ed033c583493a57de9a136e81cfb88e039d7cf2"
           }
         },
         {
