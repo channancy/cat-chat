@@ -47,7 +47,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     private TimeZone mTimeZone;
     private String mUserID;
     private String mFriendID;
-    private User mFriend;
+    private Bundle mBundle = new Bundle();
 
     public ChatListAdapter(Context context, String userID) {
         mContext = context;
@@ -91,11 +91,11 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
                 mFirebaseDatabase.getReference().child("users").child(mFriendID).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        mFriend = dataSnapshot.getValue(User.class);
+                        User friend = dataSnapshot.getValue(User.class);
 
                         // Use uploaded profile picture
-                        if (mFriend.getAvatarUrl() != null) {
-                            Glide.with(mContext).load(mFriend.getAvatarUrl()).into(holder.avatarUrl);
+                        if (friend.getAvatarUrl() != null) {
+                            Glide.with(mContext).load(friend.getAvatarUrl()).into(holder.avatarUrl);
 
                         }
                         // Otherwise, use default profile picture
@@ -104,7 +104,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
                         }
 
                         // Set friend name
-                        holder.title.setText(mFriend.getName());
+                        holder.title.setText(friend.getName());
                     }
 
                     @Override
@@ -147,14 +147,48 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         @Override
         public void onClick(View view) {
             Chat chat = mChatList.get(getAdapterPosition());
+            mBundle.putString("chatID", chat.getChatID());
 
-            // Load messages
-            Bundle args = new Bundle();
-            args.putString("chatID", chat.getChatID());
-            args.putString("chatName", mFriend.getName());
-            Intent intent = new Intent(mContext, ChatActivity.class);
-            intent.putExtras(args);
-            mContext.startActivity(intent);
+            // Find member in chat who is not the logged in user (user's friend)
+            mFirebaseDatabase.getReference().child("members").child(chat.getChatID()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String friendID = null;
+
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        if (!child.getKey().equals(mUserID)) {
+                            friendID = child.getKey();
+                            break;
+                        }
+                    }
+
+                    // Get user's friend's name
+                    if (friendID != null) {
+                        mFirebaseDatabase.getReference().child("users").child(friendID).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                User friend = dataSnapshot.getValue(User.class);
+                                mBundle.putString("chatName", friend.getName());
+
+                                // Start chat activity
+                                Intent intent = new Intent(mContext, ChatActivity.class);
+                                intent.putExtras(mBundle);
+                                mContext.startActivity(intent);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
     }
 

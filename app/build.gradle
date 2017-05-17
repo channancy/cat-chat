@@ -15,8 +15,8 @@ android {
         applicationId "channa.com.catchat"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 3
-        versionName "3.0"
+        versionCode 5
+        versionName "5.0"
     }
     buildTypes {
         release {
